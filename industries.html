@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Industries | Kainocore Technologies</title>
+<meta name="description" content="Physical infrastructure for organizations building and operating high-density AI infrastructure. Kainocore Technologies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   Industries page — focus-state inline accordion
+   Row-gap:0 + row-2 margin-top = cards touch their expander with zero gap.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 2×2 accordion grid ────────────────────────────────────────────────── */
+.ia-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+  row-gap: 0;          /* zero gap — cards touch their expander directly */
+  margin-top: 28px;
+}
+
+/* Row-2 cards need explicit top-spacing since row-gap is 0 */
+.ia-card[data-row="2"] {
+  margin-top: 10px;
+}
+
+/* ── Industry card (trigger) ─────────────────────────────────────────────── */
+.ia-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  cursor: pointer;
+  padding: 26px 28px 22px;
+  font-family: Inter, Arial, sans-serif;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform .28s cubic-bezier(.2,0,0,1),
+    box-shadow .28s ease,
+    border-color .28s ease,
+    border-radius .22s ease,
+    background .22s ease,
+    opacity .28s ease;
+}
+
+/* Gradient bloom */
+.ia-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(37,99,255,.05) 0%, transparent 52%);
+  border-radius: inherit;
+  pointer-events: none;
+  transition: opacity .22s ease;
+}
+
+/* Hairline top highlight */
+.ia-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 16px; right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,255,.26), transparent);
+  pointer-events: none;
+  transition: height .22s ease, background .22s ease;
+}
+
+/* Default hover (only when grid is NOT in focus mode) */
+.ia-card:hover:not(.is-active) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(37,99,255,.10), 0 2px 6px rgba(7,16,29,.05);
+  border-color: rgba(37,99,255,.3);
+}
+
+/* ── Active card ──────────────────────────────────────────────────────────── */
+.ia-card.is-active {
+  border-color: rgba(37,99,255,.62);
+  background: rgba(37,99,255,.07);
+  box-shadow:
+    0 0 0 1px rgba(37,99,255,.12) inset,
+    0 4px 20px rgba(37,99,255,.16);
+  transform: none;
+  z-index: 2;
+  position: relative;
+}
+
+.ia-card.is-active::before {
+  background: linear-gradient(150deg, rgba(37,99,255,.12) 0%, rgba(37,99,255,.04) 60%, transparent 100%);
+}
+
+.ia-card.is-active::after {
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(37,99,255,.8) 18%,
+    rgba(37,99,255,.8) 82%,
+    transparent 100%);
+}
+
+/* Connected: card bottom flattens and border dissolves into expander */
+.ia-card.is-active.is-expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;  /* seam disappears — expander begins */
+}
+
+/* ── Card interior ───────────────────────────────────────────────────────── */
+.ia-num {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .15em;
+  color: var(--blue);
+  margin-bottom: 10px;
+  transition: color .22s ease;
+}
+
+.ia-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.22;
+  margin: 0 0 8px;
+  display: block;
+  transition: color .22s ease;
+}
+
+.ia-card.is-active .ia-name,
+.ia-card.is-active .ia-num { color: var(--blue); }
+
+.ia-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.52;
+  flex: 1;
+  margin: 0;
+  max-height: 100px;   /* transition target: collapses when dimmed */
+  overflow: hidden;
+  transition: max-height .28s ease, opacity .22s ease, margin .22s ease;
+}
+
+.ia-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: color .22s ease, border-color .22s ease, opacity .22s ease;
+}
+
+.ia-card:hover .ia-cta,
+.ia-card.is-active .ia-cta {
+  color: var(--blue);
+  border-color: rgba(37,99,255,.22);
+}
+
+/* Chevron rotates when open */
+.ia-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .28s cubic-bezier(.2,0,0,1), color .22s ease;
+  flex-shrink: 0;
+}
+
+.ia-card.is-active .ia-chevron {
+  transform: rotate(90deg);
+  color: var(--blue);
+}
+
+/* ── Focus mode: dim non-active cards ────────────────────────────────────── */
+.ia-grid.has-focus .ia-card:not(.is-active) {
+  opacity: 0.58;
+  border-color: rgba(7,16,29,.07);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Collapse the description in dim state */
+.ia-grid.has-focus .ia-card:not(.is-active) .ia-desc {
+  max-height: 0;
+  opacity: 0;
+  margin-bottom: 0;
+}
+
+/* Reduce the CTA prominence */
+.ia-grid.has-focus .ia-card:not(.is-active) .ia-cta {
+  opacity: 0.5;
+}
+
+/* Hover: restore enough contrast to feel clickable */
+.ia-grid.has-focus .ia-card:not(.is-active):hover {
+  opacity: 0.85;
+  border-color: rgba(37,99,255,.22);
+  background: rgba(37,99,255,.02);
+}
+
+.ia-grid.has-focus .ia-card:not(.is-active):hover .ia-desc {
+  max-height: 100px;
+  opacity: 0.8;
+}
+
+.ia-grid.has-focus .ia-card:not(.is-active):hover .ia-cta {
+  opacity: 0.85;
+}
+
+/* ── Expander row — spans both columns, zero-gap below cards ─────────────── */
+.ia-exp-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .32s cubic-bezier(.2,0,0,1);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  /* Bottom spacing after content (before next card row or section end) */
+  margin-bottom: 0;
+}
+
+.ia-exp-row.is-open {
+  grid-template-rows: 1fr;
+  margin-bottom: 10px;
+}
+
+.ia-exp-body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Expander content card ───────────────────────────────────────────────── */
+.ia-exp-card {
+  background: rgba(37,99,255,.048);
+  border: 1px solid rgba(37,99,255,.62);
+  border-top: none;                 /* seamlessly continues the active card above */
+  border-radius: 0 0 18px 18px;    /* flat top, rounded bottom */
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transition: opacity .2s ease .08s;
+}
+
+.ia-exp-row.is-open .ia-exp-card {
+  opacity: 1;
+}
+
+/* Column indicator: bright 3px stripe over the source card's column */
+.ia-exp-row[data-col="1"] .ia-exp-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -1px;
+  width: calc(50% - 6px);
+  height: 3px;
+  background: rgba(37,99,255,.88);
+  border-radius: 0 2px 0 0;
+  pointer-events: none;
+}
+
+.ia-exp-row[data-col="2"] .ia-exp-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: -1px;
+  width: calc(50% - 6px);
+  height: 3px;
+  background: rgba(37,99,255,.88);
+  border-radius: 2px 0 0 0;
+  pointer-events: none;
+}
+
+/* ── Panel layout ───────────────────────────────────────────────────────── */
+.ia-panel {
+  padding: 28px 36px 24px;
+}
+
+.ia-panel-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-bottom: 20px;
+}
+
+.ia-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ia-section + .ia-section {
+  margin-top: 18px;
+}
+
+.ia-micro {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--blue);
+  margin-bottom: 1px;
+}
+
+.ia-section p {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.62;
+  margin: 0;
+}
+
+.ia-solutions-row {
+  padding-top: 16px;
+  border-top: 1px solid rgba(37,99,255,.12);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ia-solutions-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.ia-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.ia-tags a {
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: 600;
+  background: rgba(37,99,255,.07);
+  border: 1px solid rgba(37,99,255,.22);
+  border-radius: 5px;
+  padding: 5px 11px;
+  text-decoration: none;
+  line-height: 1;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.ia-tags a:hover {
+  background: rgba(37,99,255,.13);
+  border-color: rgba(37,99,255,.4);
+}
+
+/* ── Sub-panels ──────────────────────────────────────────────────────────── */
+.ia-subpanel { display: none; }
+.ia-subpanel.is-active {
+  display: block;
+  animation: solsFadeUp .24s ease both;
+}
+
+/* ── Mobile: true per-card accordion via flex + CSS order ────────────────── */
+@media (max-width: 980px) {
+  .ia-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 20px;
+  }
+
+  /* Fixed visual order for cards */
+  #ia-card-integrators { order: 1; margin-bottom: 10px; }
+  #ia-card-datacenter  { order: 3; margin-bottom: 10px; }
+  #ia-exp-row-1        { order: 2; margin-bottom: 0;    } /* JS overrides to 2 or 4 */
+  #ia-card-neocloud    { order: 5; margin-bottom: 10px; margin-top: 0; }
+  #ia-card-epc         { order: 7; margin-bottom: 10px; margin-top: 0; }
+  #ia-exp-row-2        { order: 6; margin-bottom: 0;    } /* JS overrides to 6 or 8 */
+
+  /* Remove desktop row-2 margin (handled via flex order above) */
+  .ia-card[data-row="2"] { margin-top: 0; }
+
+  .ia-panel-cols { grid-template-columns: 1fr; gap: 0; }
+
+  /* Column indicator not meaningful on single-column mobile */
+  .ia-exp-row[data-col="1"] .ia-exp-card::before,
+  .ia-exp-row[data-col="2"] .ia-exp-card::before { display: none; }
+
+  /* Full-width column stripe on mobile */
+  .ia-exp-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: rgba(37,99,255,.82);
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .ia-panel { padding: 20px 18px 18px; }
+  .ia-card  { padding: 20px 18px 16px; }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ia-card     { transition: opacity .01s, border-color .01s, background .01s; }
+  .ia-desc     { transition: none; }
+  .ia-exp-row  { transition: none; }
+  .ia-chevron  { transition: none; }
+  .ia-exp-card { transition: none; opacity: 1; }
+  .ia-subpanel.is-active { animation: none; }
+}
+</style>
+
+
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+
+<!-- ── PAGE HERO ──────────────────────────────────────────────────────────── -->
+<section class="inds-hero">
+  <div class="container">
+    <div class="kicker">Industries</div>
+    <h1>Infrastructure for the companies<br>building the AI era.</h1>
+    <p>As AI infrastructure becomes denser, power, thermal management and connectivity increasingly determine what can actually be deployed and scaled.</p>
+    <div class="inds-hero-pillars">Power&nbsp;&nbsp;·&nbsp;&nbsp;Thermal management&nbsp;&nbsp;·&nbsp;&nbsp;Interconnect</div>
+  </div>
+</section>
+
+<!-- ── INLINE ACCORDION ───────────────────────────────────────────────────── -->
+<section class="inds-wrap">
+  <div class="container">
+
+    <div class="ia-grid" id="ia-grid">
+
+      <!-- ─── ROW 1 CARDS ─────────────────────────────────────────────────── -->
+
+      <button class="ia-card" id="ia-card-integrators"
+              data-target="integrators" data-row="1" data-col="1"
+              aria-expanded="false">
+        <span class="ia-num">01</span>
+        <strong class="ia-name">AI &amp; HPC System Integrators</strong>
+        <p class="ia-desc">Deliver dense AI systems without power, cooling or connectivity becoming the project bottleneck.</p>
+        <span class="ia-cta">
+          <span>View details</span>
+          <span class="ia-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+
+      <button class="ia-card" id="ia-card-datacenter"
+              data-target="datacenter" data-row="1" data-col="2"
+              aria-expanded="false">
+        <span class="ia-num">02</span>
+        <strong class="ia-name">Data Center &amp; Colocation Operators</strong>
+        <p class="ia-desc">Support higher rack densities and AI workloads without rebuilding the entire facility around every deployment.</p>
+        <span class="ia-cta">
+          <span>View details</span>
+          <span class="ia-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+
+      <!-- ─── ROW 1 EXPANDER ───────────────────────────────────────────────── -->
+      <div class="ia-exp-row" id="ia-exp-row-1" aria-live="polite">
+        <div class="ia-exp-body">
+          <div class="ia-exp-card">
+
+            <!-- Sub-panel: Integrators -->
+            <div class="ia-subpanel is-active" id="ia-sub-integrators">
+              <div class="ia-panel">
+                <div class="ia-panel-cols">
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">The challenge</span>
+                      <p>AI and HPC deployments are increasingly difficult to deliver with conventional infrastructure. Higher rack densities create new demands around power delivery, heat removal and high-speed connectivity that standard data-center designs were not built to meet.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">What this limits</span>
+                      <p>Infrastructure constraints can delay deployments, reduce achievable compute density and force costly redesigns late in a project, often when options are most limited.</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">What becomes possible</span>
+                      <p>With the right supporting infrastructure, integrators can deploy denser systems, support more powerful GPU platforms and deliver increasingly complex AI environments without physical infrastructure becoming the limiting factor.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">How Kainocore helps</span>
+                      <p>Kainocore gives integrators access to specialist power, cooling and interconnect technologies, with direct access to vendor engineering teams during project development and specification.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="ia-solutions-row">
+                  <span class="ia-solutions-label">Relevant solutions</span>
+                  <div class="ia-tags">
+                    <a href="solutions.html#power">High-Density Power</a>
+                    <a href="solutions.html#cooling">Advanced Cooling</a>
+                    <a href="solutions.html#interconnect">AI Optical Interconnect</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sub-panel: Data Centers -->
+            <div class="ia-subpanel" id="ia-sub-datacenter">
+              <div class="ia-panel">
+                <div class="ia-panel-cols">
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">The challenge</span>
+                      <p>AI customers increasingly require rack densities and cooling architectures that many existing facilities were not originally designed to support, and the gap is widening as GPU power envelopes keep climbing.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">What this limits</span>
+                      <p>Available power and thermal capacity can restrict which AI workloads can be hosted, how quickly new capacity can be deployed and how effectively existing floor space is used.</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">What becomes possible</span>
+                      <p>Modern power and thermal infrastructure can enable higher-density halls, AI-ready capacity and more compute per MW, without necessarily requiring full facility rebuilds.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">How Kainocore helps</span>
+                      <p>Kainocore provides access to specialist infrastructure technologies for high-density environments, from advanced power distribution to liquid cooling and high-bandwidth connectivity, backed by local commercial support.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="ia-solutions-row">
+                  <span class="ia-solutions-label">Relevant solutions</span>
+                  <div class="ia-tags">
+                    <a href="solutions.html#power">High-Density Power</a>
+                    <a href="solutions.html#cooling">Advanced Cooling</a>
+                    <a href="solutions.html#interconnect">AI Optical Interconnect</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.ia-exp-card -->
+        </div><!-- /.ia-exp-body -->
+      </div><!-- /.ia-exp-row (row 1) -->
+
+
+      <!-- ─── ROW 2 CARDS ─────────────────────────────────────────────────── -->
+
+      <button class="ia-card" id="ia-card-neocloud"
+              data-target="neocloud" data-row="2" data-col="1"
+              aria-expanded="false">
+        <span class="ia-num">03</span>
+        <strong class="ia-name">Neocloud &amp; GPU Compute Operators</strong>
+        <p class="ia-desc">Scale GPU capacity when available power, heat removal and network bandwidth start limiting growth.</p>
+        <span class="ia-cta">
+          <span>View details</span>
+          <span class="ia-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+
+      <button class="ia-card" id="ia-card-epc"
+              data-target="epc" data-row="2" data-col="2"
+              aria-expanded="false">
+        <span class="ia-num">04</span>
+        <strong class="ia-name">Engineering &amp; EPC Firms</strong>
+        <p class="ia-desc">Design AI-ready infrastructure early enough to prevent expensive redesigns, delays and specification changes.</p>
+        <span class="ia-cta">
+          <span>View details</span>
+          <span class="ia-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+
+      <!-- ─── ROW 2 EXPANDER ───────────────────────────────────────────────── -->
+      <div class="ia-exp-row" id="ia-exp-row-2" aria-live="polite">
+        <div class="ia-exp-body">
+          <div class="ia-exp-card">
+
+            <!-- Sub-panel: Neocloud -->
+            <div class="ia-subpanel" id="ia-sub-neocloud">
+              <div class="ia-panel">
+                <div class="ia-panel-cols">
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">The challenge</span>
+                      <p>For GPU operators, acquiring accelerators is only part of the challenge. Growth increasingly depends on whether enough power can be delivered, heat removed efficiently and clusters networked at sufficient bandwidth.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">What this limits</span>
+                      <p>Physical infrastructure can directly cap the number of GPUs that can be deployed, slow expansion of available compute capacity and reduce the economics of GPU asset utilisation.</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">What becomes possible</span>
+                      <p>Better infrastructure enables denser GPU clusters, more compute per MW, faster capacity expansion and more efficient use of expensive accelerator assets.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">How Kainocore helps</span>
+                      <p>Kainocore connects GPU compute operators with specialist infrastructure technologies across power, thermal management and optical interconnect, with local support across Benelux.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="ia-solutions-row">
+                  <span class="ia-solutions-label">Relevant solutions</span>
+                  <div class="ia-tags">
+                    <a href="solutions.html#power">High-Density Power</a>
+                    <a href="solutions.html#cooling">Advanced Cooling</a>
+                    <a href="solutions.html#interconnect">AI Optical Interconnect</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sub-panel: EPC -->
+            <div class="ia-subpanel" id="ia-sub-epc">
+              <div class="ia-panel">
+                <div class="ia-panel-cols">
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">The challenge</span>
+                      <p>Power density, liquid cooling and high-speed connectivity increasingly need to be considered during the earliest stages of AI infrastructure design, not added later as an afterthought.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">What this limits</span>
+                      <p>If these requirements are addressed too late, projects risk expensive redesign, construction delays, higher lifecycle costs and restricted technology choices at the point of delivery.</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ia-section" style="margin-bottom:20px">
+                      <span class="ia-micro">What becomes possible</span>
+                      <p>Early access to appropriate technologies allows engineering teams to design facilities around future AI densities instead of retrofitting solutions under time and cost pressure.</p>
+                    </div>
+                    <div class="ia-section">
+                      <span class="ia-micro">How Kainocore helps</span>
+                      <p>Kainocore provides access to specialist vendors, product expertise and technical support during technology selection and early-stage specification.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="ia-solutions-row">
+                  <span class="ia-solutions-label">Relevant solutions</span>
+                  <div class="ia-tags">
+                    <a href="solutions.html#power">High-Density Power</a>
+                    <a href="solutions.html#cooling">Advanced Cooling</a>
+                    <a href="solutions.html#interconnect">AI Optical Interconnect</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.ia-exp-card -->
+        </div><!-- /.ia-exp-body -->
+      </div><!-- /.ia-exp-row (row 2) -->
+
+    </div><!-- /.ia-grid -->
+  </div>
+</section>
+
+<!-- ── CLOSING CTA ────────────────────────────────────────────────────────── -->
+<section class="sols-cta">
+  <div class="container">
+    <div class="sols-cta-inner">
+      <div class="sols-cta-text">
+        <h3>Building high-density AI infrastructure?</h3>
+        <p>Whether you are integrating systems, operating compute capacity or designing the next generation of data centers, Kainocore can help you access the specialist infrastructure behind it.</p>
+      </div>
+      <a class="sols-cta-link" href="contact.html">Discuss your project →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="site-footer"></div>
+<script src="script.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var cards   = Array.prototype.slice.call(document.querySelectorAll('.ia-card'));
+  var grid    = document.getElementById('ia-grid');
+  var expRows = {
+    '1': document.getElementById('ia-exp-row-1'),
+    '2': document.getElementById('ia-exp-row-2')
+  };
+
+  /* Currently active state */
+  var activeTarget = null;   /* e.g. 'integrators' */
+  var activeRow    = null;   /* '1' or '2' */
+
+  function openExpander(rowId, target, col) {
+    var row = expRows[rowId];
+    if (!row) return;
+
+    /* Set column indicator so CSS can position the accent stripe */
+    row.dataset.col = col;
+
+    /* Show only the right sub-panel */
+    var subPanels = row.querySelectorAll('.ia-subpanel');
+    subPanels.forEach(function (sp) {
+      var wasActive = sp.classList.contains('is-active');
+      var shouldBeActive = sp.id === 'ia-sub-' + target;
+      sp.classList.toggle('is-active', shouldBeActive);
+      /* Re-trigger animation when switching within same open row */
+      if (shouldBeActive && !wasActive) {
+        sp.classList.remove('is-active');
+        void sp.offsetWidth; /* reflow */
+        sp.classList.add('is-active');
+      }
+    });
+
+    row.classList.add('is-open');
+  }
+
+  function closeExpander(rowId) {
+    var row = expRows[rowId];
+    if (row) row.classList.remove('is-open');
+  }
+
+  function closeAll() {
+    Object.keys(expRows).forEach(function (k) { closeExpander(k); });
+    cards.forEach(function (c) {
+      c.classList.remove('is-active', 'is-expanded');
+      c.setAttribute('aria-expanded', 'false');
+    });
+    grid.classList.remove('has-focus');
+    activeTarget = null;
+    activeRow    = null;
+  }
+
+  cards.forEach(function (card) {
+    card.addEventListener('click', function () {
+      var target = card.dataset.target;
+      var row    = card.dataset.row;
+      var col    = card.dataset.col;
+
+      /* Toggle: clicking the already-active card collapses and clears focus */
+      if (activeTarget === target) {
+        closeAll();
+        grid.classList.remove('has-focus');
+        return;
+      }
+
+      /* If a different row was open, close it cleanly */
+      if (activeRow && activeRow !== row) {
+        closeExpander(activeRow);
+        /* Remove is-expanded from cards in old row */
+        cards.forEach(function (c) {
+          if (c.dataset.row === activeRow) c.classList.remove('is-expanded');
+        });
+      }
+
+      /* Deactivate all cards */
+      cards.forEach(function (c) {
+        c.classList.remove('is-active', 'is-expanded');
+        c.setAttribute('aria-expanded', 'false');
+      });
+
+      /* Activate this card */
+      card.classList.add('is-active', 'is-expanded');
+      card.setAttribute('aria-expanded', 'true');
+
+      /* Open the right expander */
+      openExpander(row, target, col);
+
+      /* Apply focus mode — dims inactive cards */
+      grid.classList.add('has-focus');
+
+      activeTarget = target;
+      activeRow    = row;
+
+      /* On mobile: reorder expander so it appears directly below clicked card,
+         then scroll it into view */
+      if (window.innerWidth <= 980) {
+        /* Order map: row→col → expander order value */
+        var orderMap = { '1': { '1': 2, '2': 4 }, '2': { '1': 6, '2': 8 } };
+        var expOrder = orderMap[row] && orderMap[row][col];
+        var exp = expRows[row];
+        if (exp && expOrder) exp.style.order = expOrder;
+
+        setTimeout(function () {
+          if (exp) exp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 60);
+      }
+    });
+  });
+
+  /* Page loads fully collapsed — no auto-open */
+
+}());
+</script>
+</body>
+</html>

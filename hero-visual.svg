@@ -1,0 +1,45 @@
+<svg width="1800" height="1440" viewBox="0 0 1800 1440" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1800" height="1440" fill="#EEF3FA"/>
+<rect y="980" width="1800" height="460" fill="url(#floor)"/>
+<path d="M900 210L1380 580V1280H420V580L900 210Z" fill="#E8EEF7"/>
+<path d="M900 210L420 580H520L900 300L1280 580H1380L900 210Z" fill="#D4DEEB"/>
+<rect x="620" y="380" width="560" height="900" rx="12" fill="#F8FBFF" stroke="#D9E3F0"/>
+<rect x="210" y="380" width="300" height="900" rx="18" fill="#1B2D47"/>
+<rect x="1290" y="380" width="300" height="900" rx="18" fill="#1B2D47"/>
+<rect x="650" y="380" width="500" height="900" rx="14" fill="#F7FAFF"/>
+<rect x="680" y="430" width="440" height="20" rx="10" fill="#E2EBF5"/>
+<rect x="260" y="430" width="70" height="780" rx="8" fill="#0C1B2F"/>
+<rect x="355" y="430" width="70" height="780" rx="8" fill="#10233C"/>
+<rect x="450" y="430" width="30" height="780" rx="8" fill="#0D1C30"/>
+<rect x="1320" y="430" width="70" height="780" rx="8" fill="#0D1B30"/>
+<rect x="1415" y="430" width="70" height="780" rx="8" fill="#132743"/>
+<rect x="1510" y="430" width="30" height="780" rx="8" fill="#0D1C30"/>
+<rect x="720" y="530" width="360" height="520" rx="18" fill="url(#plate)"/>
+<rect x="715" y="1045" width="370" height="14" rx="7" fill="#DDE7F2"/>
+<path d="M820 1170H980" stroke="#D3DEEB" stroke-width="14" stroke-linecap="round"/>
+<path d="M692 456H1106" stroke="#D4DEEA" stroke-width="2"/>
+<path d="M692 482H1106" stroke="#DCE5F0" stroke-width="2"/>
+<path d="M692 508H1106" stroke="#DCE5F0" stroke-width="2"/>
+<path d="M900 240V1280" stroke="url(#glow)" stroke-width="8" opacity="0.6"/>
+<path d="M0 980H1800" stroke="#D6E1EE" stroke-width="2"/>
+<path d="M618 380L420 580" stroke="#E1E8F2" stroke-width="3"/>
+<path d="M1182 380L1380 580" stroke="#E1E8F2" stroke-width="3"/>
+<ellipse cx="900" cy="1230" rx="420" ry="44" fill="#E3EAF3"/>
+<defs>
+<linearGradient id="floor" x1="900" y1="980" x2="900" y2="1440" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F8FBFF"/>
+<stop offset="1" stop-color="#DEE8F4"/>
+</linearGradient>
+<linearGradient id="plate" x1="720" y1="530" x2="1080" y2="1050" gradientUnits="userSpaceOnUse">
+<stop stop-color="#05142A"/>
+<stop offset="0.38" stop-color="#142A4C"/>
+<stop offset="0.75" stop-color="#0A1C34"/>
+<stop offset="1" stop-color="#10223D"/>
+</linearGradient>
+<linearGradient id="glow" x1="900" y1="240" x2="900" y2="1280" gradientUnits="userSpaceOnUse">
+<stop stop-color="#7DD3FC"/>
+<stop offset="0.5" stop-color="#2563FF"/>
+<stop offset="1" stop-color="#7DD3FC"/>
+</linearGradient>
+</defs>
+</svg>

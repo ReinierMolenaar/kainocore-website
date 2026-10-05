@@ -1,0 +1,2093 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Infrastructure Configurator | Kainocore Technologies</title>
+<meta name="description" content="Configure power, cooling and interconnect for high-density AI deployments. Indicative early-stage planning tool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   AI Infrastructure Configurator — page-scoped styles
+   All rules use the cfg- prefix; the existing design system tokens are reused.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.cfg-hero {
+  position: relative;
+  padding: 76px 0 60px;
+  overflow: hidden;
+  background: linear-gradient(160deg,#f0f5ff 0%,#f8faff 50%,#edf2fb 100%);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Blueprint grid overlay */
+.cfg-hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(37,99,255,.052) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,255,.052) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0,0,0,.55) 20%,
+    rgba(0,0,0,.55) 80%,
+    transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0,0,0,.55) 20%,
+    rgba(0,0,0,.55) 80%,
+    transparent 100%);
+}
+
+/* Intersection dots */
+.cfg-hero-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(37,99,255,.18) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+  opacity: .55;
+}
+
+/* Radial glow */
+.cfg-hero-glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 480px;
+  background: radial-gradient(ellipse at center, rgba(37,99,255,.07) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.cfg-hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+/* Centred eyebrow — symmetric lines either side */
+.cfg-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--blue);
+  margin-bottom: 20px;
+}
+.cfg-eyebrow::before,
+.cfg-eyebrow::after {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--blue);
+  opacity: .7;
+}
+
+.cfg-hero-inner h1 {
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -.052em;
+  margin: 0 0 18px;
+  color: var(--ink);
+}
+
+.cfg-hero-inner > p {
+  max-width: 580px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.cfg-hero-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 11.5px;
+  color: var(--muted);
+  background: rgba(37,99,255,.05);
+  border: 1px solid rgba(37,99,255,.15);
+  border-radius: 6px;
+  padding: 5px 13px;
+  letter-spacing: .005em;
+}
+.cfg-hero-note::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  opacity: .65;
+  flex-shrink: 0;
+}
+
+/* ── Main section ──────────────────────────────────────────────────────────── */
+.cfg-main {
+  padding: 36px 0 72px;
+  background: var(--soft);
+}
+
+.cfg-layout {
+  display: grid;
+  grid-template-columns: 1.88fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── Card ──────────────────────────────────────────────────────────────────── */
+.cfg-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 32px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.cfg-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(37,99,255,.025) 0%, transparent 44%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.cfg-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 18px; right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,255,.17), transparent);
+  pointer-events: none;
+}
+
+/* ── Stepper ───────────────────────────────────────────────────────────────── */
+.cfg-stepper {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+/* Connecting track behind the circles */
+.cfg-stepper-track {
+  position: absolute;
+  top: 14px;
+  left: calc(10% - 2px);
+  right: calc(10% - 2px);
+  height: 2px;
+  background: var(--line);
+  z-index: 0;
+}
+.cfg-stepper-fill {
+  position: absolute;
+  top: 14px;
+  left: calc(10% - 2px);
+  height: 2px;
+  background: var(--blue);
+  z-index: 1;
+  width: 0%;
+  transition: width .38s cubic-bezier(.2,0,0,1);
+}
+
+.cfg-step-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  position: relative;
+  z-index: 2;
+  font-family: Inter, Arial, sans-serif;
+}
+.cfg-step-btn:hover { opacity: .75; }
+
+.cfg-step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: #fff;
+  border: 2px solid var(--line);
+  color: var(--muted);
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.cfg-step-btn.is-active .cfg-step-circle {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.cfg-step-btn.is-done .cfg-step-circle {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.cfg-step-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .01em;
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+.cfg-step-btn.is-active .cfg-step-label { color: var(--blue); font-weight: 700; }
+.cfg-step-btn.is-done  .cfg-step-label { color: var(--blue); }
+
+/* ── Step panes ─────────────────────────────────────────────────────────────── */
+.cfg-pane { display: none; }
+.cfg-pane.is-active {
+  display: block;
+  animation: solsFadeUp .22s ease both;
+}
+
+/* ── Fields ──────────────────────────────────────────────────────────────────── */
+.cfg-fields { display: flex; flex-direction: column; gap: 22px; }
+
+.cfg-field-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* ── Segmented control ───────────────────────────────────────────────────────── */
+.cfg-seg {
+  display: flex;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+.cfg-seg-opt {
+  flex: 1;
+  padding: 9px 8px;
+  border-radius: 7px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: Inter, Arial, sans-serif;
+  transition: background .14s ease, color .14s ease, box-shadow .14s ease;
+  white-space: nowrap;
+}
+.cfg-seg-opt:hover:not(.is-active) {
+  color: var(--ink);
+  background: rgba(255,255,255,.7);
+}
+.cfg-seg-opt.is-active {
+  background: #fff;
+  color: var(--blue);
+  box-shadow: 0 1px 4px rgba(7,16,29,.1), 0 0 0 1px rgba(37,99,255,.12);
+  font-weight: 700;
+}
+
+/* ── Select ──────────────────────────────────────────────────────────────────── */
+.cfg-select {
+  width: 100%;
+  padding: 12px 36px 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2367758a' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+  background-size: 12px 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  font: 14px/1 Inter, Arial, sans-serif;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .14s ease, box-shadow .14s ease;
+}
+.cfg-select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,255,.1);
+}
+
+/* ── Slider ──────────────────────────────────────────────────────────────────── */
+.cfg-slider-wrap { display: flex; flex-direction: column; gap: 9px; }
+.cfg-slider-row  { display: flex; align-items: center; gap: 16px; }
+
+.cfg-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  background: var(--line);
+}
+.cfg-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(37,99,255,.15), 0 1px 3px rgba(0,0,0,.12);
+  transition: box-shadow .14s ease;
+}
+.cfg-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 5px rgba(37,99,255,.18), 0 1px 4px rgba(0,0,0,.15);
+}
+.cfg-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: none;
+  cursor: pointer;
+}
+.cfg-slider-val {
+  min-width: 82px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.cfg-slider-limits {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Number input ─────────────────────────────────────────────────────────────── */
+.cfg-num-row { display: flex; align-items: center; gap: 12px; }
+.cfg-num-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: 700 15px Inter, Arial, sans-serif;
+  color: var(--ink);
+  transition: border-color .14s ease, box-shadow .14s ease;
+}
+.cfg-num-input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,255,.1);
+}
+.cfg-num-unit {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* ── Toggle row ───────────────────────────────────────────────────────────────── */
+.cfg-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color .14s ease;
+  gap: 16px;
+}
+.cfg-toggle-row:hover { border-color: rgba(37,99,255,.26); }
+.cfg-toggle-info  { display: flex; flex-direction: column; gap: 2px; }
+.cfg-toggle-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.cfg-toggle-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.cfg-toggle-track {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: #d0d8e4;
+  position: relative;
+  flex-shrink: 0;
+  transition: background .2s ease;
+}
+.cfg-toggle-track.is-on { background: var(--blue); }
+.cfg-toggle-thumb {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #fff;
+  top: 2.5px;
+  left: 2.5px;
+  transition: transform .2s cubic-bezier(.2,0,0,1);
+  box-shadow: 0 1px 3px rgba(0,0,0,.16);
+}
+.cfg-toggle-track.is-on .cfg-toggle-thumb { transform: translateX(18px); }
+
+/* ── Radio options ────────────────────────────────────────────────────────────── */
+.cfg-radio-group { display: flex; flex-direction: column; gap: 6px; }
+.cfg-radio-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color .14s ease, background .14s ease;
+  font: 500 14px Inter, Arial, sans-serif;
+  color: var(--ink);
+  text-align: left;
+  width: 100%;
+}
+.cfg-radio-opt:hover:not(.is-active) {
+  border-color: rgba(37,99,255,.3);
+  background: rgba(37,99,255,.02);
+}
+.cfg-radio-opt.is-active {
+  border-color: rgba(37,99,255,.5);
+  background: rgba(37,99,255,.04);
+  color: var(--blue);
+  font-weight: 600;
+}
+.cfg-radio-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: #fff;
+  flex-shrink: 0;
+  transition: border-color .14s ease, background .14s ease;
+  position: relative;
+}
+.cfg-radio-opt.is-active .cfg-radio-dot {
+  border-color: var(--blue);
+  background: var(--blue);
+}
+.cfg-radio-opt.is-active .cfg-radio-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* ── Step nav buttons ──────────────────────────────────────────────────────────── */
+.cfg-step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  gap: 12px;
+}
+.cfg-btn-back {
+  padding: 11px 20px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font: 600 14px Inter, Arial, sans-serif;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color .14s ease, color .14s ease;
+}
+.cfg-btn-back:hover { border-color: rgba(37,99,255,.26); color: var(--ink); }
+.cfg-btn-next {
+  padding: 12px 24px;
+  border-radius: 9px;
+  border: none;
+  background: var(--blue);
+  font: 700 14px Inter, Arial, sans-serif;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .14s ease, box-shadow .14s ease, transform .14s ease;
+  letter-spacing: .005em;
+}
+.cfg-btn-next:hover {
+  background: #1a52e0;
+  box-shadow: 0 4px 14px rgba(37,99,255,.28);
+  transform: translateY(-1px);
+}
+
+/* ── Compatibility note ──────────────────────────────────────────────────────── */
+.cfg-compat-note {
+  padding: 13px 15px;
+  background: rgba(37,99,255,.04);
+  border: 1px solid rgba(37,99,255,.14);
+  border-radius: 9px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  min-height: 46px;
+  transition: all .2s ease;
+}
+
+/* ── Textarea ────────────────────────────────────────────────────────────────── */
+.cfg-textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: 14px/1.55 Inter, Arial, sans-serif;
+  color: var(--ink);
+  resize: vertical;
+  min-height: 84px;
+  transition: border-color .14s ease;
+}
+.cfg-textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,255,.1);
+}
+
+/* ── Recommendation panel ─────────────────────────────────────────────────────── */
+.cfg-right {
+  position: sticky;
+  top: calc(92px + 20px);
+}
+
+.cfg-rec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cfg-rec-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.cfg-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #b45309;
+  background: rgba(217,119,6,.07);
+  border: 1px solid rgba(217,119,6,.24);
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+.cfg-status-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d97706;
+}
+
+/* Stats grid */
+.cfg-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.cfg-stat {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.cfg-stat-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.cfg-stat-val {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.cfg-stat-unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 2px;
+  letter-spacing: 0;
+}
+
+/* Divider */
+.cfg-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 14px 0;
+}
+
+/* Recommendation cards */
+.cfg-rec-cards { display: flex; flex-direction: column; gap: 7px; }
+.cfg-rec-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 13px 14px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  transition: border-color .2s ease;
+}
+.cfg-rec-card:hover { border-color: rgba(37,99,255,.22); }
+.cfg-rec-card-eye {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  color: var(--blue);
+  margin-bottom: 1px;
+}
+.cfg-rec-card-val {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.015em;
+  line-height: 1.3;
+}
+.cfg-rec-card-sub {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* Warnings */
+.cfg-warnings { display: flex; flex-direction: column; gap: 7px; }
+.cfg-warning-item {
+  display: flex;
+  gap: 9px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.5;
+  background: rgba(245,158,11,.06);
+  border: 1px solid rgba(245,158,11,.28);
+  color: #92400e;
+}
+.cfg-warning-item.is-critical {
+  background: rgba(239,68,68,.06);
+  border-color: rgba(239,68,68,.28);
+  color: #991b1b;
+}
+.cfg-warning-icon { flex-shrink: 0; font-size: 13px; line-height: 1.4; }
+
+/* Action buttons */
+.cfg-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cfg-act-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 13px 20px;
+  border-radius: 9px;
+  background: var(--blue);
+  color: #fff;
+  font: 700 14px Inter, Arial, sans-serif;
+  text-decoration: none;
+  letter-spacing: .005em;
+  transition: background .14s ease, box-shadow .14s ease, transform .14s ease;
+}
+.cfg-act-primary:hover {
+  background: #1a52e0;
+  box-shadow: 0 4px 14px rgba(37,99,255,.28);
+  transform: translateY(-1px);
+  color: #fff;
+}
+.cfg-act-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 20px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink-2);
+  font: 600 13px Inter, Arial, sans-serif;
+  cursor: pointer;
+  transition: border-color .14s ease, color .14s ease, box-shadow .14s ease;
+}
+.cfg-act-secondary:hover {
+  border-color: rgba(37,99,255,.3);
+  box-shadow: 0 2px 8px rgba(37,99,255,.08);
+  color: var(--blue);
+}
+
+/* Flash effect on generate */
+.cfg-card--flash {
+  box-shadow: 0 0 0 3px rgba(37,99,255,.22);
+  border-color: rgba(37,99,255,.42) !important;
+  transition: box-shadow .15s ease, border-color .15s ease !important;
+}
+
+/* ── Support value cards ─────────────────────────────────────────────────────── */
+.cfg-support {
+  padding: 60px 0;
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+.cfg-support-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.cfg-support-header h2 {
+  font-size: clamp(22px, 2.8vw, 32px);
+  letter-spacing: -.035em;
+  margin: 8px 0 0;
+  color: var(--ink);
+}
+.cfg-support-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.cfg-support-card {
+  padding: 26px 28px 24px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.cfg-support-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(37,99,255,.038) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cfg-support-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 14px; right: 14px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,255,.2), transparent);
+  pointer-events: none;
+}
+.cfg-support-eye {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--blue);
+  margin-bottom: 12px;
+  display: block;
+}
+.cfg-support-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0 0 9px;
+}
+.cfg-support-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.58;
+  margin: 0;
+}
+
+/* ── Bottom CTA ──────────────────────────────────────────────────────────────── */
+.cfg-cta-section {
+  padding: 56px 0 72px;
+  background: var(--soft);
+  border-top: 1px solid var(--line);
+}
+.cfg-cta-inner {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 44px 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.cfg-cta-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, rgba(37,99,255,.03) 0%, transparent 45%);
+  pointer-events: none;
+}
+.cfg-cta-inner::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 18px; right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,255,.16), transparent);
+  pointer-events: none;
+}
+.cfg-cta-text h3 {
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.cfg-cta-text p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: 480px;
+}
+.cfg-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue);
+  padding: 14px 28px;
+  border-radius: 9px;
+  text-decoration: none;
+  flex-shrink: 0;
+  position: relative;
+  transition: background .14s ease, box-shadow .14s ease, transform .14s ease;
+}
+.cfg-cta-btn:hover {
+  background: #1a52e0;
+  box-shadow: 0 4px 16px rgba(37,99,255,.28);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+/* ── Disclaimer ──────────────────────────────────────────────────────────────── */
+.cfg-disclaimer {
+  padding: 22px 0 28px;
+  background: var(--soft);
+  border-top: 1px solid var(--line);
+}
+.cfg-disclaimer p {
+  font-size: 11.5px;
+  color: var(--muted);
+  text-align: center;
+  margin: 0 auto;
+  line-height: 1.65;
+  max-width: 740px;
+}
+
+/* ── Print styles ────────────────────────────────────────────────────────────── */
+.cfg-print-header { display: none; }
+
+@media print {
+  #site-header, #site-footer,
+  .cfg-hero, .cfg-left,
+  .cfg-support, .cfg-cta-section, .cfg-disclaimer,
+  .cfg-actions, .cfg-stepper { display: none !important; }
+
+  body { background: #fff !important; }
+  .cfg-main { padding: 0; background: #fff !important; }
+  .cfg-layout { grid-template-columns: 1fr; }
+  .cfg-right { position: static; }
+  .cfg-card::before, .cfg-card::after { display: none; }
+
+  .cfg-print-header {
+    display: block !important;
+    padding: 0 0 18px;
+    border-bottom: 1px solid #dfe5ed;
+    margin-bottom: 22px;
+  }
+  .cfg-print-header-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #07101d;
+    margin-bottom: 2px;
+  }
+  .cfg-print-header-sub {
+    font-size: 12px;
+    color: #67758a;
+  }
+  .cfg-print-disclaimer {
+    display: block !important;
+    font-size: 10px;
+    color: #67758a;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #dfe5ed;
+    line-height: 1.6;
+  }
+}
+.cfg-print-disclaimer { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .cfg-layout {
+    grid-template-columns: 1fr;
+  }
+  .cfg-right {
+    position: static;
+  }
+  .cfg-support-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .cfg-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    padding: 32px 28px;
+  }
+  .cfg-stats { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 650px) {
+  .cfg-hero { padding: 52px 0 44px; }
+  .cfg-card { padding: 22px 18px; }
+  .cfg-step-label { display: none; }
+  .cfg-stepper-track, .cfg-stepper-fill { top: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cfg-pane.is-active { animation: none; }
+  .cfg-stepper-fill   { transition: none; }
+  .cfg-btn-next, .cfg-btn-back,
+  .cfg-act-primary, .cfg-act-secondary,
+  .cfg-cta-btn { transition: none; }
+}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────────── -->
+<section class="cfg-hero">
+  <div class="cfg-hero-grid" aria-hidden="true"></div>
+  <div class="cfg-hero-glow"  aria-hidden="true"></div>
+  <div class="container cfg-hero-inner">
+    <div class="cfg-eyebrow">AI Infrastructure Configurator</div>
+    <h1>Design AI infrastructure<br>around real constraints.</h1>
+    <p>Configure power, cooling and interconnect requirements for high-density AI deployments and explore a recommended infrastructure architecture in real time.</p>
+    <div><span class="cfg-hero-note">Interactive concept tool. Final designs require technical validation.</span></div>
+  </div>
+</section>
+
+<!-- ── MAIN CONFIGURATOR ────────────────────────────────────────────────────── -->
+<section class="cfg-main">
+  <div class="container">
+    <div class="cfg-layout">
+
+      <!-- ── LEFT: Form ─────────────────────────────────────────────────────── -->
+      <div class="cfg-left">
+        <div class="cfg-card">
+
+          <!-- Stepper -->
+          <div class="cfg-stepper" id="cfg-stepper" aria-label="Configuration steps">
+            <div class="cfg-stepper-track" aria-hidden="true"></div>
+            <div class="cfg-stepper-fill"  aria-hidden="true" id="cfg-stepper-fill"></div>
+            <button class="cfg-step-btn is-active" data-step="1" aria-label="Step 1: Workload">
+              <div class="cfg-step-circle" aria-hidden="true"><span>1</span></div>
+              <span class="cfg-step-label">Workload</span>
+            </button>
+            <button class="cfg-step-btn" data-step="2" aria-label="Step 2: Power">
+              <div class="cfg-step-circle" aria-hidden="true"><span>2</span></div>
+              <span class="cfg-step-label">Power</span>
+            </button>
+            <button class="cfg-step-btn" data-step="3" aria-label="Step 3: Cooling">
+              <div class="cfg-step-circle" aria-hidden="true"><span>3</span></div>
+              <span class="cfg-step-label">Cooling</span>
+            </button>
+            <button class="cfg-step-btn" data-step="4" aria-label="Step 4: Interconnect">
+              <div class="cfg-step-circle" aria-hidden="true"><span>4</span></div>
+              <span class="cfg-step-label">Interconnect</span>
+            </button>
+            <button class="cfg-step-btn" data-step="5" aria-label="Step 5: Facility">
+              <div class="cfg-step-circle" aria-hidden="true"><span>5</span></div>
+              <span class="cfg-step-label">Facility</span>
+            </button>
+          </div>
+
+          <!-- ── STEP 1: Workload ───────────────────────────────────────────── -->
+          <div class="cfg-pane is-active" id="cfg-pane-1">
+            <div class="cfg-fields">
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Workload Type</span>
+                <div class="cfg-seg" id="seg-workload">
+                  <button class="cfg-seg-opt is-active" data-val="training">AI Training</button>
+                  <button class="cfg-seg-opt" data-val="inference">AI Inference</button>
+                  <button class="cfg-seg-opt" data-val="hpc">HPC</button>
+                  <button class="cfg-seg-opt" data-val="custom">Custom</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">GPU Type</span>
+                <select class="cfg-select" id="sel-gpu-type">
+                  <option value="H200" selected>NVIDIA H200</option>
+                  <option value="H100">NVIDIA H100</option>
+                  <option value="B200">NVIDIA B200</option>
+                  <option value="GB200">NVIDIA GB200 NVL72</option>
+                  <option value="MI300X">AMD MI300X</option>
+                  <option value="custom">Custom / TBD</option>
+                </select>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">GPU Cluster Size</span>
+                <div class="cfg-slider-wrap">
+                  <div class="cfg-slider-row">
+                    <input type="range" class="cfg-slider" id="sl-gpu-count"
+                           min="8" max="2048" step="8" value="256"
+                           aria-label="GPU cluster size">
+                    <span class="cfg-slider-val"><span id="val-gpu-count">256</span> GPUs</span>
+                  </div>
+                  <div class="cfg-slider-limits"><span>8</span><span>2,048</span></div>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Rack Power Density</span>
+                <div class="cfg-slider-wrap">
+                  <div class="cfg-slider-row">
+                    <input type="range" class="cfg-slider" id="sl-rack-density"
+                           min="10" max="200" step="5" value="80"
+                           aria-label="Rack power density in kilowatts">
+                    <span class="cfg-slider-val"><span id="val-rack-density">80</span> kW</span>
+                  </div>
+                  <div class="cfg-slider-limits"><span>10 kW</span><span>200 kW</span></div>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Redundancy</span>
+                <div class="cfg-seg" id="seg-redundancy">
+                  <button class="cfg-seg-opt" data-val="n">N</button>
+                  <button class="cfg-seg-opt is-active" data-val="n1">N+1</button>
+                  <button class="cfg-seg-opt" data-val="2n">2N</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Deployment Timeline</span>
+                <select class="cfg-select" id="sel-timeline">
+                  <option value="lt3">&lt; 3 months</option>
+                  <option value="3-6">3–6 months</option>
+                  <option value="6-12" selected>6–12 months</option>
+                  <option value="12+">12+ months</option>
+                </select>
+              </div>
+
+            </div>
+            <div class="cfg-step-nav">
+              <span></span>
+              <button class="cfg-btn-next" data-next="2">
+                Continue <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div><!-- /pane-1 -->
+
+          <!-- ── STEP 2: Power ──────────────────────────────────────────────── -->
+          <div class="cfg-pane" id="cfg-pane-2">
+            <div class="cfg-fields">
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Available Facility Power</span>
+                <div class="cfg-num-row">
+                  <input type="number" class="cfg-num-input" id="inp-facility-power"
+                         value="500" min="0" max="100000"
+                         aria-label="Available facility power in kilowatts">
+                  <span class="cfg-num-unit">kW</span>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Power Architecture Preference</span>
+                <div class="cfg-radio-group" id="rg-power-arch">
+                  <button class="cfg-radio-opt is-active" data-val="none">
+                    <span class="cfg-radio-dot"></span>No preference
+                  </button>
+                  <button class="cfg-radio-opt" data-val="trad-ac">
+                    <span class="cfg-radio-dot"></span>Traditional AC
+                  </button>
+                  <button class="cfg-radio-opt" data-val="hi-eff">
+                    <span class="cfg-radio-dot"></span>High-efficiency AC/DC
+                  </button>
+                  <button class="cfg-radio-opt" data-val="dc-ready">
+                    <span class="cfg-radio-dot"></span>DC-ready / future HVDC
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">PDU / Busway Strategy</span>
+                <div class="cfg-radio-group" id="rg-pdu">
+                  <button class="cfg-radio-opt is-active" data-val="standard">
+                    <span class="cfg-radio-dot"></span>Standard
+                  </button>
+                  <button class="cfg-radio-opt" data-val="high-density">
+                    <span class="cfg-radio-dot"></span>High-density
+                  </button>
+                  <button class="cfg-radio-opt" data-val="intelligent">
+                    <span class="cfg-radio-dot"></span>Intelligent monitored distribution
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Power Redundancy</span>
+                <div class="cfg-seg" id="seg-power-red">
+                  <button class="cfg-seg-opt" data-val="n">N</button>
+                  <button class="cfg-seg-opt is-active" data-val="n1">N+1</button>
+                  <button class="cfg-seg-opt" data-val="2n">2N</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <div class="cfg-toggle-row" id="tog-power-constrained">
+                  <div class="cfg-toggle-info">
+                    <span class="cfg-toggle-title">Power-constrained site</span>
+                    <span class="cfg-toggle-sub">Emphasise efficiency in recommendations</span>
+                  </div>
+                  <div class="cfg-toggle-track" aria-hidden="true">
+                    <div class="cfg-toggle-thumb"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="cfg-step-nav">
+              <button class="cfg-btn-back" data-back="1">← Back</button>
+              <button class="cfg-btn-next" data-next="3">Continue <span aria-hidden="true">→</span></button>
+            </div>
+          </div><!-- /pane-2 -->
+
+          <!-- ── STEP 3: Cooling ────────────────────────────────────────────── -->
+          <div class="cfg-pane" id="cfg-pane-3">
+            <div class="cfg-fields">
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Cooling Preference</span>
+                <div class="cfg-radio-group" id="rg-cooling">
+                  <button class="cfg-radio-opt is-active" data-val="none">
+                    <span class="cfg-radio-dot"></span>No preference, use recommendation
+                  </button>
+                  <button class="cfg-radio-opt" data-val="air">
+                    <span class="cfg-radio-dot"></span>Air cooling
+                  </button>
+                  <button class="cfg-radio-opt" data-val="rearDoor">
+                    <span class="cfg-radio-dot"></span>Rear-door heat exchanger
+                  </button>
+                  <button class="cfg-radio-opt" data-val="directToChip">
+                    <span class="cfg-radio-dot"></span>Direct-to-chip liquid cooling
+                  </button>
+                  <button class="cfg-radio-opt" data-val="immersion">
+                    <span class="cfg-radio-dot"></span>Immersion / specialist
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Facility Water Available</span>
+                <div class="cfg-seg" id="seg-water">
+                  <button class="cfg-seg-opt" data-val="yes">Yes</button>
+                  <button class="cfg-seg-opt" data-val="no">No</button>
+                  <button class="cfg-seg-opt is-active" data-val="unknown">Unknown</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Cooling Redundancy</span>
+                <div class="cfg-seg" id="seg-cooling-red">
+                  <button class="cfg-seg-opt" data-val="n">N</button>
+                  <button class="cfg-seg-opt is-active" data-val="n1">N+1</button>
+                  <button class="cfg-seg-opt" data-val="2n">2N</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <div class="cfg-toggle-row" id="tog-heat-reuse">
+                  <div class="cfg-toggle-info">
+                    <span class="cfg-toggle-title">Heat reuse interest</span>
+                    <span class="cfg-toggle-sub">Consider waste heat recovery in recommendations</span>
+                  </div>
+                  <div class="cfg-toggle-track" aria-hidden="true">
+                    <div class="cfg-toggle-thumb"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Compatibility Note</span>
+                <div class="cfg-compat-note" id="compat-note" aria-live="polite">
+                  Select a cooling preference above to see compatibility notes.
+                </div>
+              </div>
+
+            </div>
+            <div class="cfg-step-nav">
+              <button class="cfg-btn-back" data-back="2">← Back</button>
+              <button class="cfg-btn-next" data-next="4">Continue <span aria-hidden="true">→</span></button>
+            </div>
+          </div><!-- /pane-3 -->
+
+          <!-- ── STEP 4: Interconnect ───────────────────────────────────────── -->
+          <div class="cfg-pane" id="cfg-pane-4">
+            <div class="cfg-fields">
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Network Speed</span>
+                <div class="cfg-seg" id="seg-net-speed">
+                  <button class="cfg-seg-opt" data-val="400G">400G</button>
+                  <button class="cfg-seg-opt is-active" data-val="800G">800G</button>
+                  <button class="cfg-seg-opt" data-val="1.6T">1.6T-ready</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Interconnect Type</span>
+                <div class="cfg-radio-group" id="rg-ic-type">
+                  <button class="cfg-radio-opt" data-val="dac">
+                    <span class="cfg-radio-dot"></span>DAC
+                  </button>
+                  <button class="cfg-radio-opt" data-val="aoc">
+                    <span class="cfg-radio-dot"></span>AOC
+                  </button>
+                  <button class="cfg-radio-opt" data-val="optical">
+                    <span class="cfg-radio-dot"></span>Optical transceivers
+                  </button>
+                  <button class="cfg-radio-opt is-active" data-val="mixed">
+                    <span class="cfg-radio-dot"></span>Mixed / recommended
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Cluster Scale</span>
+                <div class="cfg-radio-group" id="rg-cluster-scale">
+                  <button class="cfg-radio-opt" data-val="single">
+                    <span class="cfg-radio-dot"></span>Single rack
+                  </button>
+                  <button class="cfg-radio-opt is-active" data-val="multi">
+                    <span class="cfg-radio-dot"></span>Multi-rack
+                  </button>
+                  <button class="cfg-radio-opt" data-val="large">
+                    <span class="cfg-radio-dot"></span>Large scale-out fabric
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <div class="cfg-toggle-row" id="tog-latency">
+                  <div class="cfg-toggle-info">
+                    <span class="cfg-toggle-title">Latency-sensitive workload</span>
+                    <span class="cfg-toggle-sub">Prioritise low-latency interconnect recommendations</span>
+                  </div>
+                  <div class="cfg-toggle-track" aria-hidden="true">
+                    <div class="cfg-toggle-thumb"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="cfg-step-nav">
+              <button class="cfg-btn-back" data-back="3">← Back</button>
+              <button class="cfg-btn-next" data-next="5">Continue <span aria-hidden="true">→</span></button>
+            </div>
+          </div><!-- /pane-4 -->
+
+          <!-- ── STEP 5: Facility ───────────────────────────────────────────── -->
+          <div class="cfg-pane" id="cfg-pane-5">
+            <div class="cfg-fields">
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Deployment Type</span>
+                <div class="cfg-radio-group" id="rg-deploy-type">
+                  <button class="cfg-radio-opt is-active" data-val="existing">
+                    <span class="cfg-radio-dot"></span>Existing data center
+                  </button>
+                  <button class="cfg-radio-opt" data-val="new-build">
+                    <span class="cfg-radio-dot"></span>New build
+                  </button>
+                  <button class="cfg-radio-opt" data-val="colo">
+                    <span class="cfg-radio-dot"></span>Colocation
+                  </button>
+                  <button class="cfg-radio-opt" data-val="modular">
+                    <span class="cfg-radio-dot"></span>Modular / prefabricated
+                  </button>
+                  <button class="cfg-radio-opt" data-val="edge">
+                    <span class="cfg-radio-dot"></span>Edge / specialist facility
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Space Constraint</span>
+                <div class="cfg-seg" id="seg-space">
+                  <button class="cfg-seg-opt" data-val="low">Low</button>
+                  <button class="cfg-seg-opt is-active" data-val="medium">Medium</button>
+                  <button class="cfg-seg-opt" data-val="high">High</button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Existing Cooling Infrastructure</span>
+                <select class="cfg-select" id="sel-exist-cooling">
+                  <option value="air">Air only</option>
+                  <option value="chilled-water">Chilled water available</option>
+                  <option value="warm-water">Warm water loop available</option>
+                  <option value="liquid-ready">Liquid-cooling ready</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Existing Power Constraint</span>
+                <select class="cfg-select" id="sel-exist-power">
+                  <option value="none">No major constraint</option>
+                  <option value="limited">Limited available MW</option>
+                  <option value="upgrade">Upgrade required</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Additional Notes / Constraints</span>
+                <textarea class="cfg-textarea" id="inp-notes"
+                          placeholder="Describe any site-specific constraints, project context or requirements…"></textarea>
+              </div>
+
+            </div>
+            <div class="cfg-step-nav">
+              <button class="cfg-btn-back" data-back="4">← Back</button>
+              <button class="cfg-btn-next" id="btn-generate" data-next="done">
+                Generate architecture <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div><!-- /pane-5 -->
+
+        </div><!-- /.cfg-card (left) -->
+      </div><!-- /.cfg-left -->
+
+      <!-- ── RIGHT: Recommendation panel ──────────────────────────────────── -->
+      <div class="cfg-right">
+        <div class="cfg-card" id="cfg-rec-panel">
+
+          <!-- Print-only header -->
+          <div class="cfg-print-header">
+            <div class="cfg-print-header-name">Kainocore Technologies</div>
+            <div class="cfg-print-header-sub">AI Infrastructure Configurator: Concept Summary</div>
+          </div>
+
+          <div class="cfg-rec-header">
+            <span class="cfg-rec-title">Recommended Architecture</span>
+            <span class="cfg-status-badge">Concept recommendation</span>
+          </div>
+
+          <!-- Summary stats -->
+          <div class="cfg-stats" id="cfg-stats">
+            <div class="cfg-stat">
+              <div class="cfg-stat-label">GPUs</div>
+              <div class="cfg-stat-val" id="stat-gpus">256</div>
+            </div>
+            <div class="cfg-stat">
+              <div class="cfg-stat-label">Est. Racks</div>
+              <div class="cfg-stat-val" id="stat-racks">—</div>
+            </div>
+            <div class="cfg-stat">
+              <div class="cfg-stat-label">Est. IT Load</div>
+              <div class="cfg-stat-val" id="stat-it-load">—</div>
+            </div>
+            <div class="cfg-stat">
+              <div class="cfg-stat-label">Facility Load</div>
+              <div class="cfg-stat-val" id="stat-fac-load">—</div>
+            </div>
+          </div>
+
+          <div class="cfg-divider"></div>
+
+          <!-- Recommendation cards -->
+          <div class="cfg-rec-cards">
+            <div class="cfg-rec-card">
+              <span class="cfg-rec-card-eye">Power</span>
+              <span class="cfg-rec-card-val" id="rec-power-val">—</span>
+              <span class="cfg-rec-card-sub" id="rec-power-sub">—</span>
+            </div>
+            <div class="cfg-rec-card">
+              <span class="cfg-rec-card-eye">Cooling</span>
+              <span class="cfg-rec-card-val" id="rec-cooling-val">—</span>
+              <span class="cfg-rec-card-sub" id="rec-cooling-sub">—</span>
+            </div>
+            <div class="cfg-rec-card">
+              <span class="cfg-rec-card-eye">Interconnect</span>
+              <span class="cfg-rec-card-val" id="rec-ic-val">—</span>
+              <span class="cfg-rec-card-sub" id="rec-ic-sub">—</span>
+            </div>
+            <div class="cfg-rec-card">
+              <span class="cfg-rec-card-eye">Deployment Notes</span>
+              <span class="cfg-rec-card-val" id="rec-deploy-val">—</span>
+              <span class="cfg-rec-card-sub" id="rec-deploy-sub">—</span>
+            </div>
+          </div>
+
+          <!-- Warnings — rendered by JS -->
+          <div class="cfg-warnings" id="cfg-warnings" aria-live="polite"></div>
+
+          <!-- Action buttons -->
+          <div class="cfg-actions">
+            <a class="cfg-act-primary" href="contact.html">
+              Request design review →
+            </a>
+            <button class="cfg-act-secondary" id="btn-print">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M3.5 5V1.5h7V5M3.5 10.5H2A1.5 1.5 0 0 1 .5 9V6A1.5 1.5 0 0 1 2 4.5h10A1.5 1.5 0 0 1 13.5 6v3A1.5 1.5 0 0 1 12 10.5h-1.5"
+                      stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="3.5" y="8" width="7" height="5.5" rx=".75"
+                      stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              Print / Save summary
+            </button>
+          </div>
+
+          <!-- Print-only disclaimer -->
+          <p class="cfg-print-disclaimer">
+            This summary is generated by the Kainocore AI Infrastructure Configurator.
+            It provides indicative, early-stage planning guidance only.
+            Final architecture, compatibility and product selection require independent technical validation.
+            © 2026 Kainocore Technologies, an Arkenstone Holding company.
+          </p>
+
+        </div><!-- /.cfg-card (right) -->
+      </div><!-- /.cfg-right -->
+
+    </div><!-- /.cfg-layout -->
+  </div>
+</section>
+
+<!-- ── SUPPORT VALUE CARDS ──────────────────────────────────────────────────── -->
+<section class="cfg-support">
+  <div class="container">
+    <div class="cfg-support-header">
+      <div class="kicker" style="justify-content:center">How this helps</div>
+      <h2>Built to make early planning faster.</h2>
+    </div>
+    <div class="cfg-support-grid">
+      <div class="cfg-support-card">
+        <span class="cfg-support-eye">Compatibility logic</span>
+        <h3 class="cfg-support-title">Match constraints before you commit.</h3>
+        <p class="cfg-support-desc">Check power, cooling and interconnect choices against basic deployment constraints before they become expensive design changes.</p>
+      </div>
+      <div class="cfg-support-card">
+        <span class="cfg-support-eye">Faster qualification</span>
+        <h3 class="cfg-support-title">Turn requirements into direction faster.</h3>
+        <p class="cfg-support-desc">Build a structured infrastructure direction from early project requirements, and arrive at vendor conversations better prepared.</p>
+      </div>
+      <div class="cfg-support-card">
+        <span class="cfg-support-eye">Vendor-backed design support</span>
+        <h3 class="cfg-support-title">A starting point, not a final design.</h3>
+        <p class="cfg-support-desc">Use the configurator output as context before technical validation with Kainocore and specialist infrastructure vendors.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOTTOM CTA ───────────────────────────────────────────────────────────── -->
+<section class="cfg-cta-section">
+  <div class="container">
+    <div class="cfg-cta-inner">
+      <div class="cfg-cta-text">
+        <h3>Need a custom design?</h3>
+        <p>Talk to Kainocore about your infrastructure requirements, site constraints or high-density AI deployment.</p>
+      </div>
+      <a class="cfg-cta-btn" href="contact.html">Talk to Kainocore →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── DISCLAIMER ────────────────────────────────────────────────────────────── -->
+<div class="cfg-disclaimer">
+  <div class="container">
+    <p>This configurator provides indicative recommendations for early-stage planning only. Final architecture, compatibility and product selection require technical validation. All estimates are illustrative and should not be used for engineering or procurement decisions without independent verification.</p>
+  </div>
+</div>
+
+</main>
+<div id="site-footer"></div>
+
+<!-- ── CONFIGURATOR LOGIC ─────────────────────────────────────────────────────── -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── State ─────────────────────────────────────────────────────────────── */
+  var S = {
+    workloadType:      'training',
+    gpuType:           'H200',
+    gpuCount:          256,
+    rackDensity:       80,
+    redundancy:        'n1',
+    timeline:          '6-12',
+
+    facilityPower:     500,
+    powerArch:         'none',
+    pduStrategy:       'standard',
+    powerRedundancy:   'n1',
+    powerConstrained:  false,
+
+    coolingPref:       'none',
+    waterAvailable:    'unknown',
+    coolingRedundancy: 'n1',
+    heatReuse:         false,
+
+    networkSpeed:      '800G',
+    icType:            'mixed',
+    clusterScale:      'multi',
+    latencySensitive:  false,
+
+    deployType:        'existing',
+    spaceConstraint:   'medium',
+    existCooling:      'air',
+    existPower:        'none',
+    notes:             ''
+  };
+
+  var currentStep = 1;
+  var TOTAL_STEPS = 5;
+
+  /* ── DOM helpers ───────────────────────────────────────────────────────── */
+  function $id(id) { return document.getElementById(id); }
+
+  function setText(id, val) {
+    var e = $id(id);
+    if (e) e.textContent = val;
+  }
+
+  function setHTML(id, val) {
+    var e = $id(id);
+    if (e) e.innerHTML = val;
+  }
+
+  /* ── Stepper ───────────────────────────────────────────────────────────── */
+  var CHECKMARK_SVG =
+    '<svg width="11" height="9" viewBox="0 0 11 9" fill="none" aria-hidden="true">' +
+    '<path d="M1 4.5l3 3L10 1" stroke="#fff" stroke-width="1.8" ' +
+    'stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function updateStepper() {
+    var btns = document.querySelectorAll('.cfg-step-btn');
+    btns.forEach(function (btn) {
+      var s = parseInt(btn.dataset.step, 10);
+      btn.classList.remove('is-active', 'is-done');
+      if (s === currentStep) btn.classList.add('is-active');
+      else if (s < currentStep) btn.classList.add('is-done');
+
+      var circle = btn.querySelector('.cfg-step-circle');
+      if (s < currentStep) {
+        circle.innerHTML = CHECKMARK_SVG;
+      } else {
+        circle.innerHTML = '<span>' + s + '</span>';
+      }
+    });
+
+    var fill = $id('cfg-stepper-fill');
+    if (fill) {
+      var pct = ((currentStep - 1) / (TOTAL_STEPS - 1)) * 100;
+      fill.style.width = pct + '%';
+    }
+  }
+
+  function goToStep(n) {
+    if (n < 1 || n > TOTAL_STEPS) return;
+    var old = $id('cfg-pane-' + currentStep);
+    if (old) old.classList.remove('is-active');
+    currentStep = n;
+    var next = $id('cfg-pane-' + currentStep);
+    if (next) next.classList.add('is-active');
+    updateStepper();
+    updateRecs();
+    if (window.innerWidth < 980) {
+      var card = document.querySelector('.cfg-left .cfg-card');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  /* Stepper button clicks */
+  document.querySelectorAll('.cfg-step-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      goToStep(parseInt(btn.dataset.step, 10));
+    });
+  });
+
+  /* Next / Back clicks */
+  document.querySelectorAll('.cfg-btn-next').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = btn.dataset.next;
+      if (target === 'done') {
+        /* Visual pulse on rec panel */
+        var panel = $id('cfg-rec-panel');
+        if (panel) {
+          panel.style.transition = 'box-shadow .15s ease, border-color .15s ease';
+          panel.style.boxShadow   = '0 0 0 3px rgba(37,99,255,.22)';
+          panel.style.borderColor = 'rgba(37,99,255,.44)';
+          setTimeout(function () {
+            panel.style.boxShadow   = '';
+            panel.style.borderColor = '';
+          }, 520);
+        }
+        /* On mobile, scroll to rec panel */
+        if (window.innerWidth < 980) {
+          var rec = document.querySelector('.cfg-right');
+          if (rec) rec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        updateRecs();
+      } else {
+        goToStep(parseInt(target, 10));
+      }
+    });
+  });
+
+  document.querySelectorAll('.cfg-btn-back').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      goToStep(parseInt(btn.dataset.back, 10));
+    });
+  });
+
+  /* ── Segmented controls ─────────────────────────────────────────────────── */
+  function bindSeg(id, key) {
+    var seg = $id(id);
+    if (!seg) return;
+    seg.querySelectorAll('.cfg-seg-opt').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        seg.querySelectorAll('.cfg-seg-opt').forEach(function (o) {
+          o.classList.remove('is-active');
+        });
+        opt.classList.add('is-active');
+        S[key] = opt.dataset.val;
+        updateRecs();
+      });
+    });
+  }
+
+  bindSeg('seg-workload',   'workloadType');
+  bindSeg('seg-redundancy', 'redundancy');
+  bindSeg('seg-power-red',  'powerRedundancy');
+  bindSeg('seg-water',      'waterAvailable');
+  bindSeg('seg-cooling-red','coolingRedundancy');
+  bindSeg('seg-net-speed',  'networkSpeed');
+  bindSeg('seg-space',      'spaceConstraint');
+
+  /* ── Radio groups ───────────────────────────────────────────────────────── */
+  function bindRadio(id, key) {
+    var grp = $id(id);
+    if (!grp) return;
+    grp.querySelectorAll('.cfg-radio-opt').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        grp.querySelectorAll('.cfg-radio-opt').forEach(function (o) {
+          o.classList.remove('is-active');
+        });
+        opt.classList.add('is-active');
+        S[key] = opt.dataset.val;
+        updateRecs();
+      });
+    });
+  }
+
+  bindRadio('rg-power-arch',    'powerArch');
+  bindRadio('rg-pdu',           'pduStrategy');
+  bindRadio('rg-cooling',       'coolingPref');
+  bindRadio('rg-ic-type',       'icType');
+  bindRadio('rg-cluster-scale', 'clusterScale');
+  bindRadio('rg-deploy-type',   'deployType');
+
+  /* ── Select dropdowns ───────────────────────────────────────────────────── */
+  function bindSelect(id, key) {
+    var sel = $id(id);
+    if (!sel) return;
+    sel.addEventListener('change', function () {
+      S[key] = sel.value;
+      updateRecs();
+    });
+  }
+
+  bindSelect('sel-gpu-type',      'gpuType');
+  bindSelect('sel-timeline',      'timeline');
+  bindSelect('sel-exist-cooling', 'existCooling');
+  bindSelect('sel-exist-power',   'existPower');
+
+  /* ── Sliders ────────────────────────────────────────────────────────────── */
+  function trackSlider(sl) {
+    var pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
+    sl.style.background =
+      'linear-gradient(to right, #2563ff ' + pct + '%, #dfe5ed ' + pct + '%)';
+  }
+
+  var slGpu = $id('sl-gpu-count');
+  if (slGpu) {
+    slGpu.addEventListener('input', function () {
+      S.gpuCount = parseInt(this.value, 10);
+      setText('val-gpu-count', S.gpuCount.toLocaleString());
+      trackSlider(this);
+      updateRecs();
+    });
+    trackSlider(slGpu);
+  }
+
+  var slDen = $id('sl-rack-density');
+  if (slDen) {
+    slDen.addEventListener('input', function () {
+      S.rackDensity = parseInt(this.value, 10);
+      setText('val-rack-density', S.rackDensity);
+      trackSlider(this);
+      updateRecs();
+    });
+    trackSlider(slDen);
+  }
+
+  /* ── Number inputs ──────────────────────────────────────────────────────── */
+  var inpPower = $id('inp-facility-power');
+  if (inpPower) {
+    inpPower.addEventListener('input', function () {
+      S.facilityPower = parseFloat(this.value) || 0;
+      updateRecs();
+    });
+  }
+
+  /* ── Toggles ────────────────────────────────────────────────────────────── */
+  function bindToggle(id, key) {
+    var row = $id(id);
+    if (!row) return;
+    var track = row.querySelector('.cfg-toggle-track');
+    row.addEventListener('click', function () {
+      S[key] = !S[key];
+      track.classList.toggle('is-on', S[key]);
+      updateRecs();
+    });
+  }
+
+  bindToggle('tog-power-constrained', 'powerConstrained');
+  bindToggle('tog-heat-reuse',        'heatReuse');
+  bindToggle('tog-latency',           'latencySensitive');
+
+  /* ── Notes ──────────────────────────────────────────────────────────────── */
+  var inpNotes = $id('inp-notes');
+  if (inpNotes) {
+    inpNotes.addEventListener('input', function () { S.notes = this.value; });
+  }
+
+  /* ── Recommendation engine ──────────────────────────────────────────────── */
+  function computeRecs() {
+    var gpuType     = S.gpuType;
+    var gpuCount    = S.gpuCount;
+    var rackDen     = S.rackDensity;
+    var coolingPref = S.coolingPref;
+    var netSpeed    = S.networkSpeed;
+    var redundancy  = S.redundancy;
+    var timeline    = S.timeline;
+
+    /* GPUs per rack
+       GB200 NVL72 is a 72-GPU full-rack unit at ~120 kW.
+       Other HGX-class systems: approx. 1 eight-GPU server per 8 kW budget. */
+    var gpusPerRack;
+    if (gpuType === 'GB200') {
+      gpusPerRack = 72;
+    } else {
+      var units = Math.max(1, Math.floor(rackDen / 8));
+      gpusPerRack = units * 8;
+    }
+    var rackCount = Math.ceil(gpuCount / gpusPerRack);
+    var itLoad    = rackCount * rackDen; /* kW */
+
+    /* Effective cooling (auto or user override) */
+    var effCooling;
+    if (coolingPref !== 'none') {
+      effCooling = coolingPref;
+    } else {
+      if (rackDen <= 30)      effCooling = 'air';
+      else if (rackDen <= 60) effCooling = 'rearDoor';
+      else                    effCooling = 'directToChip';
+    }
+
+    var pueMap = { air:1.35, rearDoor:1.25, directToChip:1.18, immersion:1.15, none:1.25 };
+    var pue = pueMap[effCooling] || 1.25;
+    var facLoad = Math.round(itLoad * pue);
+
+    /* ── Cooling recommendation text ────────────────────────────────────── */
+    var redLabel = redundancy === 'n' ? 'N' : redundancy === '2n' ? '2N' : 'N+1';
+    var coolingVal, coolingSub;
+    if (coolingPref === 'none') {
+      if (rackDen <= 30) {
+        coolingVal = 'Air cooling';
+        coolingSub = 'Conventional air architecture · ' + redLabel;
+      } else if (rackDen <= 60) {
+        coolingVal = 'Advanced air / rear-door';
+        coolingSub = 'RDHx-based thermal management · ' + redLabel;
+      } else if (rackDen <= 120) {
+        coolingVal = 'Direct-to-chip liquid cooling';
+        coolingSub = 'CDU-based thermal architecture · ' + redLabel;
+      } else {
+        coolingVal = 'Liquid cooling (strongly recommended)';
+        coolingSub = 'Direct-to-chip or immersion · ' + redLabel;
+      }
+    } else {
+      var coolingNames = {
+        air: 'Air cooling',
+        rearDoor: 'Rear-door heat exchanger',
+        directToChip: 'Direct-to-chip liquid cooling',
+        immersion: 'Immersion cooling'
+      };
+      coolingVal = coolingNames[coolingPref] || coolingPref;
+      coolingSub = redLabel + ' redundancy';
+    }
+    if (S.heatReuse) coolingSub += ' · heat recovery considered';
+
+    /* ── Power recommendation ───────────────────────────────────────────── */
+    var powerVal, powerSub;
+    if (rackDen <= 60) {
+      powerVal = 'Conventional AC architecture';
+      powerSub = redLabel + ' redundancy · standard distribution';
+    } else if (rackDen <= 120) {
+      powerVal = 'High-efficiency distribution';
+      powerSub = 'Intelligent PDU / busway · ' + redLabel;
+    } else {
+      powerVal = 'High-density intelligent distribution';
+      powerSub = 'DC-ready architecture worth evaluating · ' + redLabel;
+    }
+    if (S.powerConstrained) powerSub += ' · efficiency-focused';
+
+    /* ── Interconnect recommendation ────────────────────────────────────── */
+    var icVal, icSub;
+    if (gpuCount <= 64) {
+      icVal = '400G fabric';
+      icSub = 'Compatible with this cluster scale';
+    } else if (gpuCount <= 512) {
+      icVal = '800G optical fabric';
+      icSub = 'Scale-out ready · recommended';
+    } else {
+      icVal = '1.6T-ready fabric';
+      icSub = 'Future-facing large-scale design';
+    }
+    if (S.latencySensitive) icSub += ' · low-latency priority';
+
+    /* ── Deployment notes ────────────────────────────────────────────────── */
+    var gpuLabels = {
+      H200:'H200', H100:'H100', B200:'B200',
+      GB200:'GB200 NVL72', MI300X:'MI300X', custom:'Custom GPU'
+    };
+    var gpuLabel = gpuLabels[gpuType] || gpuType;
+    var tlLabels = { lt3:'< 3-month', '3-6':'3–6-month', '6-12':'6–12-month', '12+':'12+-month' };
+    var tlLabel  = tlLabels[timeline] || timeline;
+    var deployVal = gpuCount.toLocaleString() + ' ' + gpuLabel + ' GPUs';
+    var deploySub = tlLabel + ' deployment · est. ' + rackCount + ' rack' + (rackCount !== 1 ? 's' : '');
+
+    /* ── Warnings ────────────────────────────────────────────────────────── */
+    var warnings = [];
+
+    /* Air cooling mismatch */
+    if (coolingPref === 'air' && rackDen > 40) {
+      warnings.push({
+        level: rackDen > 80 ? 'critical' : 'warn',
+        text: 'Air cooling may be insufficient at ' + rackDen + ' kW/rack. ' +
+              (rackDen > 80
+                ? 'Liquid cooling is strongly recommended at this density.'
+                : 'Advanced air or liquid cooling is worth evaluating.')
+      });
+    }
+
+    /* Rear-door at high density */
+    if (coolingPref === 'rearDoor' && rackDen > 80) {
+      warnings.push({
+        level: 'warn',
+        text: 'Rear-door heat exchangers approach practical limits above ~80 kW/rack. Direct-to-chip liquid cooling is worth evaluating at ' + rackDen + ' kW.'
+      });
+    }
+
+    /* Liquid cooling without water */
+    if ((coolingPref === 'directToChip' || coolingPref === 'immersion') &&
+         S.waterAvailable === 'no') {
+      warnings.push({
+        level: 'warn',
+        text: 'The selected cooling method requires facility water supply. Current settings indicate water is not available. Please verify site capability.'
+      });
+    }
+
+    /* Facility power insufficient */
+    if (S.facilityPower > 0 && itLoad > S.facilityPower) {
+      warnings.push({
+        level: 'critical',
+        text: 'Available facility power (' + S.facilityPower + ' kW) appears insufficient for the estimated IT load (' + Math.round(itLoad) + ' kW). A power infrastructure upgrade may be required.'
+      });
+    } else if (S.facilityPower > 0 && facLoad > S.facilityPower) {
+      warnings.push({
+        level: 'warn',
+        text: 'Available facility power (' + S.facilityPower + ' kW) may be tight relative to estimated total facility load (' + facLoad + ' kW) including overhead.'
+      });
+    }
+
+    /* 400G at scale */
+    if (netSpeed === '400G' && gpuCount > 256) {
+      warnings.push({
+        level: 'warn',
+        text: '400G interconnect may constrain performance at this cluster scale. 800G fabric is recommended for clusters above 256 GPUs.'
+      });
+    }
+
+    /* Existing air-only infra with high density */
+    if (S.existCooling === 'air' && rackDen > 60) {
+      warnings.push({
+        level: 'warn',
+        text: 'Existing air-only cooling infrastructure may not support the selected rack density. Liquid cooling infrastructure will likely be required.'
+      });
+    }
+
+    /* Existing power constraints */
+    if (S.existPower === 'upgrade' || S.existPower === 'limited') {
+      warnings.push({
+        level: 'warn',
+        text: 'Existing site power constraints noted. Verify that facility power can support the estimated load before proceeding.'
+      });
+    }
+
+    return {
+      gpuCount, rackCount, itLoad: Math.round(itLoad), facLoad,
+      powerVal, powerSub,
+      coolingVal, coolingSub,
+      icVal, icSub,
+      deployVal, deploySub,
+      warnings
+    };
+  }
+
+  /* ── Update recommendation panel ───────────────────────────────────────── */
+  function updateRecs() {
+    var r = computeRecs();
+
+    /* Stats */
+    setText('stat-gpus',     r.gpuCount.toLocaleString());
+    setText('stat-racks',    r.rackCount);
+    setHTML('stat-it-load',  r.itLoad + '<span class="cfg-stat-unit"> kW</span>');
+    setHTML('stat-fac-load', r.facLoad + '<span class="cfg-stat-unit"> kW</span>');
+
+    /* Rec cards */
+    setText('rec-power-val',   r.powerVal);
+    setText('rec-power-sub',   r.powerSub);
+    setText('rec-cooling-val', r.coolingVal);
+    setText('rec-cooling-sub', r.coolingSub);
+    setText('rec-ic-val',      r.icVal);
+    setText('rec-ic-sub',      r.icSub);
+    setText('rec-deploy-val',  r.deployVal);
+    setText('rec-deploy-sub',  r.deploySub);
+
+    /* Compatibility note (step 3) */
+    updateCompatNote();
+
+    /* Warnings */
+    var wEl = $id('cfg-warnings');
+    if (wEl) {
+      if (!r.warnings.length) {
+        wEl.innerHTML = '';
+      } else {
+        wEl.innerHTML = r.warnings.map(function (w) {
+          var icon = w.level === 'critical' ? '⚠' : '◈';
+          return '<div class="cfg-warning-item' +
+            (w.level === 'critical' ? ' is-critical' : '') + '">' +
+            '<span class="cfg-warning-icon">' + icon + '</span>' +
+            '<span>' + w.text + '</span></div>';
+        }).join('');
+      }
+    }
+  }
+
+  /* ── Compatibility note (cooling step) ──────────────────────────────────── */
+  function updateCompatNote() {
+    var note = $id('compat-note');
+    if (!note) return;
+    var cp = S.coolingPref;
+    var rd = S.rackDensity;
+    var water = S.waterAvailable;
+    var msg = '';
+
+    if (cp === 'none') {
+      if (rd <= 30)       msg = 'At ' + rd + ' kW/rack, conventional air cooling is generally compatible.';
+      else if (rd <= 60)  msg = 'At ' + rd + ' kW/rack, advanced air or rear-door cooling is recommended.';
+      else                msg = 'At ' + rd + ' kW/rack, direct-to-chip liquid cooling is recommended.';
+    } else if (cp === 'air') {
+      if (rd <= 30)       msg = 'Air cooling is generally compatible at ' + rd + ' kW/rack.';
+      else if (rd <= 60)  msg = 'Air cooling may be marginal at ' + rd + ' kW/rack. Advanced air architecture recommended.';
+      else                msg = 'Air cooling is likely insufficient at ' + rd + ' kW/rack. Liquid cooling is worth considering.';
+    } else if (cp === 'rearDoor') {
+      if (rd <= 80)       msg = 'Rear-door heat exchanger is compatible at ' + rd + ' kW/rack.';
+      else                msg = 'Rear-door solutions approach practical limits above ~80 kW. Direct-to-chip liquid cooling worth evaluating.';
+    } else if (cp === 'directToChip') {
+      if (water === 'no') msg = 'Note: Direct-to-chip cooling requires facility water supply. Verify site capability.';
+      else if (water === 'yes') msg = 'Direct-to-chip liquid cooling is compatible. Facility water confirmed available.';
+      else                msg = 'Direct-to-chip cooling requires facility water. Confirm water availability before design.';
+    } else if (cp === 'immersion') {
+      msg = 'Immersion cooling requires specialist facility preparation and fluid management systems.';
+      if (water === 'no') msg += ' Verify facility compatibility before selection.';
+    }
+
+    note.textContent = msg || 'No compatibility issues identified for the current selection.';
+  }
+
+  /* ── Print / Save ───────────────────────────────────────────────────────── */
+  var btnPrint = $id('btn-print');
+  if (btnPrint) {
+    btnPrint.addEventListener('click', function () {
+      window.print();
+    });
+  }
+
+  /* ── Init ───────────────────────────────────────────────────────────────── */
+  updateStepper();
+  updateRecs();
+
+}());
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>

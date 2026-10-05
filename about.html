@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About | Kainocore Technologies</title>
+<meta name="description" content="Kainocore Technologies: what the name means, what we believe, our mission and why we exist as a specialist AI infrastructure company.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   About page — editorial brand-led redesign
+   All rules are .ab- prefixed to avoid collisions with global styles.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Shared section spacing ─────────────────────────────────────────────── */
+.ab-section {
+  padding: 66px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ab-section:last-child { border-bottom: none; }
+
+/* ── Shared section title pattern ──────────────────────────────────────── */
+.ab-section-h2 {
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.033em;
+  line-height: 1.18;
+  color: var(--ink);
+  margin: 10px 0 0;
+}
+
+/* ══ 1. DICTIONARY OPENER ══════════════════════════════════════════════════ */
+
+.ab-entry {
+  padding: 84px 0 68px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* "About" kicker lives inside .kicker (global), then the big wordmark */
+.ab-wordmark {
+  font-size: clamp(58px, 8vw, 108px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.ab-phonetic {
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--muted);
+  margin: 0 0 7px;
+  letter-spacing: 0.01em;
+}
+
+.ab-pos {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 36px;
+}
+
+/* Thin horizontal rule with blue left accent */
+.ab-rule {
+  position: relative;
+  height: 1px;
+  background: var(--line);
+  margin-bottom: 32px;
+}
+
+.ab-rule::before {
+  content: '';
+  position: absolute;
+  left: 0; top: -0.5px;
+  width: 52px;
+  height: 2px;
+  background: var(--blue);
+}
+
+/* Two-column layout: etymology (left) + meaning (right) */
+.ab-entry-cols {
+  display: grid;
+  grid-template-columns: 1fr 1.65fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.ab-etym {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.72;
+  margin: 0;
+}
+
+.ab-etym em {
+  font-style: italic;
+  color: var(--ink-2);
+}
+
+.ab-meaning {
+  padding-left: 36px;
+  border-left: 1px solid var(--line);
+}
+
+.ab-meaning-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 12px;
+}
+
+.ab-meaning-text {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.46;
+  letter-spacing: -0.022em;
+  margin: 0;
+}
+
+/* ══ 2. BELIEF STATEMENT ═══════════════════════════════════════════════════ */
+
+.ab-belief {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ab-belief-inner {
+  max-width: 820px;
+}
+
+.ab-belief-heading {
+  font-size: clamp(24px, 2.9vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.038em;
+  line-height: 1.16;
+  color: var(--ink);
+  margin: 12px 0 18px;
+  padding-left: 20px;
+  border-left: 3px solid var(--blue);
+}
+
+.ab-belief-sub {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 640px;
+  padding-left: 23px; /* aligns with heading text above */
+}
+
+/* ══ 3. MISSION & VISION ═══════════════════════════════════════════════════ */
+
+.ab-mv {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ab-mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.ab-mv-col {
+  padding-right: 52px;
+}
+
+.ab-mv-col + .ab-mv-col {
+  padding-right: 0;
+  padding-left: 52px;
+  border-left: 1px solid var(--line);
+}
+
+.ab-mv-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin: 0 0 16px;
+}
+
+.ab-mv-label::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--blue);
+  flex-shrink: 0;
+}
+
+.ab-mv-heading {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.ab-mv-text {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.68;
+  margin: 0;
+}
+
+/* ══ 4. MARKET OPPORTUNITY ═════════════════════════════════════════════════ */
+
+.ab-market {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--soft);
+}
+
+.ab-market-head {
+  max-width: 700px;
+  margin-bottom: 44px;
+}
+
+.ab-market-heading {
+  font-size: clamp(20px, 2.5vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.033em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 10px 0 14px;
+}
+
+.ab-market-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.66;
+  margin: 0;
+}
+
+/* Three stat boxes */
+.ab-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.ab-stat {
+  background: #fff;
+  padding: 26px 28px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ab-stat-num {
+  font-size: clamp(40px, 4.4vw, 58px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.ab-stat-num em {
+  font-style: normal;
+  color: var(--blue);
+}
+
+.ab-stat-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+.ab-stat-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.58;
+  margin: 0;
+  flex: 1;
+}
+
+.ab-market-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ══ 5. DIFFERENTIATORS ════════════════════════════════════════════════════ */
+
+.ab-diff {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ab-diff-head {
+  margin-bottom: 32px;
+}
+
+.ab-principles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.ab-principle {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 22px 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Subtle top-edge highlight */
+.ab-principle::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 16px; right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,255,.22), transparent);
+  pointer-events: none;
+}
+
+.ab-principle-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--blue);
+  opacity: 0.75;
+}
+
+.ab-principle-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.ab-principle-text {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ══ 6. CLOSING STATEMENT ══════════════════════════════════════════════════ */
+
+.ab-close {
+  padding: 80px 0 88px;
+  background: var(--ink);
+}
+
+.ab-close-inner {
+  max-width: 740px;
+}
+
+.ab-close-line1 {
+  font-size: clamp(20px, 2.7vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.032em;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, .42);
+  margin: 0 0 4px;
+}
+
+.ab-close-line2 {
+  font-size: clamp(20px, 2.7vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.032em;
+  line-height: 1.2;
+  color: #fff;
+  margin: 0 0 44px;
+}
+
+.ab-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: Inter, Arial, sans-serif;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.ab-cta:hover {
+  background: #1a4ee0;
+  box-shadow: 0 6px 24px rgba(37, 99, 255, .45);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.ab-cta svg {
+  flex-shrink: 0;
+  transition: transform .18s ease;
+}
+
+.ab-cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ══ RESPONSIVE ════════════════════════════════════════════════════════════ */
+
+@media (max-width: 880px) {
+  .ab-entry-cols {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .ab-meaning {
+    padding-left: 0;
+    border-left: none;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  .ab-mv-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .ab-mv-col {
+    padding-right: 0;
+    padding-bottom: 40px;
+  }
+
+  .ab-mv-col + .ab-mv-col {
+    padding-left: 0;
+    padding-bottom: 0;
+    border-left: none;
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+  }
+
+  .ab-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-principles {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .ab-entry       { padding: 58px 0 48px; }
+  .ab-belief,
+  .ab-mv,
+  .ab-market,
+  .ab-diff        { padding: 48px 0; }
+  .ab-close       { padding: 60px 0 72px; }
+  .ab-wordmark    { letter-spacing: -0.03em; }
+  .ab-stat        { padding: 20px 20px 18px; }
+  .ab-principle   { padding: 18px 18px 16px; }
+  .ab-belief-sub  { padding-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-cta, .ab-cta svg { transition: none; }
+}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     1. DICTIONARY OPENER
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="ab-entry">
+  <div class="container">
+
+    <div class="kicker" style="margin-bottom:26px">About</div>
+
+    <h1 class="ab-wordmark">Kainocore</h1>
+    <p class="ab-phonetic">/&#712;ka&#618;.no&#650;.k&#596;&#720;r/</p>
+    <span class="ab-pos">kai&#8209;no&#8209;core&nbsp;&nbsp;&middot;&nbsp;&nbsp;noun</span>
+
+    <div class="ab-rule"></div>
+
+    <div class="ab-entry-cols">
+      <p class="ab-etym">
+        From Greek <em>kain&oacute;s</em> (&#954;&#945;&#953;&#957;&#972;&#962;), meaning &ldquo;new&rdquo;,
+        &ldquo;novel&rdquo; or &ldquo;innovative&rdquo;, combined with <em>core</em>:
+        the essential foundation or central infrastructure of a system.
+      </p>
+      <div class="ab-meaning">
+        <div class="ab-meaning-label">Meaning</div>
+        <p class="ab-meaning-text">
+          The core infrastructure enabling what comes next.<br>
+          The infrastructure at the core of the AI era.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     2. BELIEF STATEMENT
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="ab-belief">
+  <div class="container">
+    <div class="ab-belief-inner">
+
+      <div class="kicker">What we believe</div>
+      <h2 class="ab-belief-heading">
+        AI growth is increasingly constrained by the infrastructure around compute.
+      </h2>
+      <p class="ab-belief-sub">
+        Power availability, thermal management and bandwidth increasingly determine
+        how quickly new AI capacity can actually be deployed. The bottleneck has
+        moved from the chip to the physical layer around it.
+      </p>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     3. MISSION & VISION
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="ab-mv">
+  <div class="container">
+
+    <div class="ab-mv-grid">
+
+      <div class="ab-mv-col">
+        <div class="ab-mv-label">Mission</div>
+        <h3 class="ab-mv-heading">
+          Make high-density AI infrastructure easier to build and scale.
+        </h3>
+        <p class="ab-mv-text">
+          We connect specialist technology manufacturers with the organizations
+          deploying AI capacity in Benelux, providing access to advanced power,
+          cooling and interconnect solutions that are not widely available through
+          general distribution.
+        </p>
+      </div>
+
+      <div class="ab-mv-col">
+        <div class="ab-mv-label">Vision</div>
+        <h3 class="ab-mv-heading">
+          Become the specialist infrastructure partner for the physical layer behind the AI era.
+        </h3>
+        <p class="ab-mv-text">
+          Power, cooling and interconnect for high-density AI. A focused platform
+          built around a small number of high-value technology categories and the
+          local market relationships that bring them to deployment.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     4. WHY THIS MARKET, WHY NOW
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="ab-market">
+  <div class="container">
+
+    <div class="ab-market-head">
+      <div class="kicker">Market context</div>
+      <h2 class="ab-market-heading">
+        A fast-growing market with a fragmented specialist supply chain.
+      </h2>
+      <p class="ab-market-sub">
+        AI infrastructure is becoming denser, more power-intensive and harder to cool
+        and connect. At the same time, many advanced infrastructure manufacturers still
+        lack strong local routes to market in Benelux. Kainocore sits between those
+        two needs.
+      </p>
+    </div>
+
+    <div class="ab-stats">
+
+      <div class="ab-stat">
+        <div class="ab-stat-num">~<em>14</em>%</div>
+        <div class="ab-stat-label">Annual growth</div>
+        <p class="ab-stat-desc">
+          Projected annual growth in global data-centre capacity through to 2030,
+          driven by accelerating AI workload demand.
+        </p>
+      </div>
+
+      <div class="ab-stat">
+        <div class="ab-stat-num">~<em>29</em>%</div>
+        <div class="ab-stat-label">CAGR forecast</div>
+        <p class="ab-stat-desc">
+          Forecast compound annual growth rate for European liquid cooling over the
+          relevant period, as high-density deployments replace air cooling.
+        </p>
+      </div>
+
+      <div class="ab-stat">
+        <div class="ab-stat-num" style="font-size:clamp(26px,3vw,40px);letter-spacing:-.03em">800G<em style="font-size:.62em;vertical-align:baseline">&rarr;</em>1.6T</div>
+        <div class="ab-stat-label">Interconnect transition</div>
+        <p class="ab-stat-desc">
+          The shift from 800G to 1.6T network speeds is driving next-generation
+          interconnect demand across AI data-centre build-outs.
+        </p>
+      </div>
+
+    </div>
+
+    <p class="ab-market-note">
+      External market forecasts and indicative figures from industry sources. Kainocore makes no representation as to their accuracy.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     5. WHAT MAKES KAINOCORE DIFFERENT
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="ab-diff">
+  <div class="container">
+
+    <div class="ab-diff-head">
+      <div class="kicker">Approach</div>
+      <h2 class="ab-section-h2">What makes Kainocore different</h2>
+    </div>
+
+    <div class="ab-principles">
+
+      <div class="ab-principle">
+        <span class="ab-principle-num">01</span>
+        <h3 class="ab-principle-title">Specialist, not broadline</h3>
+        <p class="ab-principle-text">
+          Focused on advanced infrastructure around high-density AI rather than
+          general IT distribution. A short list of high-value categories, not a
+          broadline catalogue.
+        </p>
+      </div>
+
+      <div class="ab-principle">
+        <span class="ab-principle-num">02</span>
+        <h3 class="ab-principle-title">Local execution</h3>
+        <p class="ab-principle-text">
+          Benelux market development, customer access and channel creation for
+          specialist manufacturers who want meaningful local presence rather than
+          a name on a distributor list.
+        </p>
+      </div>
+
+      <div class="ab-principle">
+        <span class="ab-principle-num">03</span>
+        <h3 class="ab-principle-title">Vendor-backed expertise</h3>
+        <p class="ab-principle-text">
+          Commercial ownership locally, supported by direct access to specialist
+          vendor engineering and technical teams where deployments require it.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     6. CLOSING STATEMENT
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="ab-close">
+  <div class="container">
+    <div class="ab-close-inner">
+
+      <p class="ab-close-line1">We are not building another general IT distributor.</p>
+      <p class="ab-close-line2">We are building a specialist platform for the physical infrastructure behind next-generation AI.</p>
+
+      <a class="ab-cta" href="contact.html">
+        Talk to Kainocore
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="site-footer"></div>
+<script src="script.js"></script>
+</body>
+</html>
