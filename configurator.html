@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Infrastructure Configurator | Kainocore Technologies</title>
-<meta name="description" content="Configure power, cooling and interconnect for high-density AI deployments. Indicative early-stage planning tool.">
+<meta name="description" content="Configure thermal, power and interconnect requirements for high-density AI deployments. Indicative early-stage planning tool.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1011,7 +1011,7 @@
   <div class="container cfg-hero-inner">
     <div class="cfg-eyebrow">AI Infrastructure Configurator</div>
     <h1>Design AI infrastructure<br>around real constraints.</h1>
-    <p>Configure power, cooling and interconnect requirements for high-density AI deployments and explore a recommended infrastructure architecture in real time.</p>
+    <p>Configure thermal, power and interconnect requirements for high-density AI deployments and explore a recommended infrastructure architecture in real time.</p>
     <div><span class="cfg-hero-note">Interactive concept tool. Final designs require technical validation.</span></div>
   </div>
 </section>
@@ -1037,9 +1037,9 @@
               <div class="cfg-step-circle" aria-hidden="true"><span>2</span></div>
               <span class="cfg-step-label">Power</span>
             </button>
-            <button class="cfg-step-btn" data-step="3" aria-label="Step 3: Cooling">
+            <button class="cfg-step-btn" data-step="3" aria-label="Step 3: Thermal">
               <div class="cfg-step-circle" aria-hidden="true"><span>3</span></div>
-              <span class="cfg-step-label">Cooling</span>
+              <span class="cfg-step-label">Thermal</span>
             </button>
             <button class="cfg-step-btn" data-step="4" aria-label="Step 4: Interconnect">
               <div class="cfg-step-circle" aria-hidden="true"><span>4</span></div>
@@ -1206,12 +1206,12 @@
             </div>
           </div><!-- /pane-2 -->
 
-          <!-- ── STEP 3: Cooling ────────────────────────────────────────────── -->
+          <!-- ── STEP 3: Thermal ────────────────────────────────────────────── -->
           <div class="cfg-pane" id="cfg-pane-3">
             <div class="cfg-fields">
 
               <div class="cfg-field">
-                <span class="cfg-field-label">Cooling Preference</span>
+                <span class="cfg-field-label">Thermal Preference</span>
                 <div class="cfg-radio-group" id="rg-cooling">
                   <button class="cfg-radio-opt is-active" data-val="none">
                     <span class="cfg-radio-dot"></span>No preference, use recommendation
@@ -1241,7 +1241,7 @@
               </div>
 
               <div class="cfg-field">
-                <span class="cfg-field-label">Cooling Redundancy</span>
+                <span class="cfg-field-label">Thermal Redundancy</span>
                 <div class="cfg-seg" id="seg-cooling-red">
                   <button class="cfg-seg-opt" data-val="n">N</button>
                   <button class="cfg-seg-opt is-active" data-val="n1">N+1</button>
@@ -1375,7 +1375,7 @@
               </div>
 
               <div class="cfg-field">
-                <span class="cfg-field-label">Existing Cooling Infrastructure</span>
+                <span class="cfg-field-label">Existing Thermal Infrastructure</span>
                 <select class="cfg-select" id="sel-exist-cooling">
                   <option value="air">Air only</option>
                   <option value="chilled-water">Chilled water available</option>
@@ -1458,7 +1458,7 @@
               <span class="cfg-rec-card-sub" id="rec-power-sub">—</span>
             </div>
             <div class="cfg-rec-card">
-              <span class="cfg-rec-card-eye">Cooling</span>
+              <span class="cfg-rec-card-eye">Thermal</span>
               <span class="cfg-rec-card-val" id="rec-cooling-val">—</span>
               <span class="cfg-rec-card-sub" id="rec-cooling-sub">—</span>
             </div>
@@ -1519,7 +1519,7 @@
       <div class="cfg-support-card">
         <span class="cfg-support-eye">Compatibility logic</span>
         <h3 class="cfg-support-title">Match constraints before you commit.</h3>
-        <p class="cfg-support-desc">Check power, cooling and interconnect choices against basic deployment constraints before they become expensive design changes.</p>
+        <p class="cfg-support-desc">Check thermal, power and interconnect choices against basic deployment constraints before they become expensive design changes.</p>
       </div>
       <div class="cfg-support-card">
         <span class="cfg-support-eye">Faster qualification</span>

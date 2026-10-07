@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Solutions | Kainocore Technologies</title>
-<meta name="description" content="Specialist power, cooling and interconnect technologies for high-density AI infrastructure. Kainocore Technologies.">
+<meta name="description" content="Specialist thermal, power, interconnect and memory infrastructure technologies for accelerated computing. Kainocore Technologies.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,8 +20,8 @@
   <div class="container">
     <div class="kicker">Solutions</div>
     <h1>Infrastructure built around<br>AI's physical constraints.</h1>
-    <p>Kainocore provides specialist power, cooling and interconnect technologies for high-density AI infrastructure.</p>
-    <div class="sols-hero-pillars">Power&nbsp;&nbsp;·&nbsp;&nbsp;Thermal management&nbsp;&nbsp;·&nbsp;&nbsp;Bandwidth</div>
+    <p>Kainocore provides specialist infrastructure technologies addressing the four fundamental bottlenecks of accelerated computing: heat, power, bandwidth and data access.</p>
+    <div class="sols-hero-pillars">Thermal&nbsp;&nbsp;·&nbsp;&nbsp;Power&nbsp;&nbsp;·&nbsp;&nbsp;Interconnect&nbsp;&nbsp;·&nbsp;&nbsp;Memory</div>
   </div>
 </section>
 
@@ -32,22 +32,22 @@
     <!-- Selector cards -->
     <div class="sols-selector" role="tablist" aria-label="Solution areas">
 
-      <button class="sols-opt is-active" id="power" data-target="sol-power"
-              role="tab" aria-selected="true" aria-controls="sol-power">
-        <span class="sols-opt-label">Power</span>
-        <strong class="sols-opt-name">High-Density AI Power</strong>
-        <span class="sols-opt-desc">Power infrastructure for increasingly dense AI compute.</span>
+      <button class="sols-opt is-active" id="thermal" data-target="sol-thermal"
+              role="tab" aria-selected="true" aria-controls="sol-thermal">
+        <span class="sols-opt-label">Thermal</span>
+        <strong class="sols-opt-name">Thermal Infrastructure</strong>
+        <span class="sols-opt-desc">Solving the heat-density bottleneck in accelerated computing.</span>
         <span class="sols-opt-cta">
           <span class="sols-opt-cta-text">View details</span>
           <span class="sols-opt-arr" aria-hidden="true">→</span>
         </span>
       </button>
 
-      <button class="sols-opt" id="cooling" data-target="sol-cooling"
-              role="tab" aria-selected="false" aria-controls="sol-cooling">
-        <span class="sols-opt-label">Cooling</span>
-        <strong class="sols-opt-name">Advanced Liquid Cooling</strong>
-        <span class="sols-opt-desc">Thermal infrastructure for next-generation GPU and AI systems.</span>
+      <button class="sols-opt" id="power" data-target="sol-power"
+              role="tab" aria-selected="false" aria-controls="sol-power">
+        <span class="sols-opt-label">Power</span>
+        <strong class="sols-opt-name">Power Infrastructure</strong>
+        <span class="sols-opt-desc">Delivering and managing extreme power loads for high-density AI.</span>
         <span class="sols-opt-cta">
           <span class="sols-opt-cta-text">View details</span>
           <span class="sols-opt-arr" aria-hidden="true">→</span>
@@ -57,8 +57,19 @@
       <button class="sols-opt" id="interconnect" data-target="sol-interconnect"
               role="tab" aria-selected="false" aria-controls="sol-interconnect">
         <span class="sols-opt-label">Interconnect</span>
-        <strong class="sols-opt-name">AI Optical Interconnect</strong>
-        <span class="sols-opt-desc">High-bandwidth connectivity for scale-up and scale-out AI fabrics.</span>
+        <strong class="sols-opt-name">Optical Interconnect</strong>
+        <span class="sols-opt-desc">High-bandwidth connectivity between GPUs, racks and clusters.</span>
+        <span class="sols-opt-cta">
+          <span class="sols-opt-cta-text">View details</span>
+          <span class="sols-opt-arr" aria-hidden="true">→</span>
+        </span>
+      </button>
+
+      <button class="sols-opt" id="memory" data-target="sol-memory"
+              role="tab" aria-selected="false" aria-controls="sol-memory">
+        <span class="sols-opt-label">Memory</span>
+        <strong class="sols-opt-name">Memory &amp; Data Access</strong>
+        <span class="sols-opt-desc">Making data available to compute efficiently at scale.</span>
         <span class="sols-opt-cta">
           <span class="sols-opt-cta-text">View details</span>
           <span class="sols-opt-arr" aria-hidden="true">→</span>
@@ -70,42 +81,12 @@
     <!-- Detail panels — one visible at a time -->
     <div class="sols-stage">
 
-      <div class="sols-panel is-active" id="sol-power" role="tabpanel" aria-labelledby="power">
+      <div class="sols-panel is-active" id="sol-thermal" role="tabpanel" aria-labelledby="thermal">
         <div class="sols-panel-card">
           <div class="sols-panel-inner">
             <div class="sols-panel-left">
-              <h2>High-Density AI Power</h2>
-              <p class="sols-panel-intro">AI racks are pushing power density beyond traditional data center designs. Kainocore helps integrators and operators source specialist power infrastructure designed for increasingly dense compute environments.</p>
-              <div class="sols-for">
-                <span class="sols-for-label">Relevant for</span>
-                <div class="sols-tags">
-                  <span>AI clusters</span>
-                  <span>GPU deployments</span>
-                  <span>HPC</span>
-                  <span>Neocloud &amp; GPU compute operators</span>
-                  <span>High-density colocation</span>
-                </div>
-              </div>
-            </div>
-            <div class="sols-panel-right">
-              <span class="sols-right-label">Key technologies</span>
-              <ul class="sols-techs">
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Rack and row power distribution</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>High-efficiency AC/DC and DC/DC conversion</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>800VDC-ready architectures</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Intelligent power monitoring and control</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="sols-panel" id="sol-cooling" role="tabpanel" aria-labelledby="cooling" hidden>
-        <div class="sols-panel-card">
-          <div class="sols-panel-inner">
-            <div class="sols-panel-left">
-              <h2>Advanced Liquid Cooling</h2>
-              <p class="sols-panel-intro">As rack density rises, air cooling increasingly becomes the limiting factor. Kainocore focuses on liquid-cooling technologies that move heat efficiently from the chip to the facility cooling loop.</p>
+              <h2>Thermal Infrastructure</h2>
+              <p class="sols-panel-intro">As rack power densities climb beyond what air cooling can handle, thermal management becomes a primary deployment constraint. Kainocore represents specialist thermal infrastructure technologies across the full liquid-cooling stack, from direct-to-chip cold plates and CDUs to loop components, manifolds and facility integration, enabling higher-density GPU and AI deployments.</p>
               <div class="sols-for">
                 <span class="sols-for-label">Relevant for</span>
                 <div class="sols-tags">
@@ -120,11 +101,44 @@
             <div class="sols-panel-right">
               <span class="sols-right-label">Key technologies</span>
               <ul class="sols-techs">
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Direct-to-chip cooling</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>CDUs and heat exchange</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Manifolds and quick disconnects</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Pumps, sensors and monitoring</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Facility-to-IT loop integration</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Direct-to-chip liquid cooling</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Cold plates, CDUs and FDUs</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Heat exchangers and manifolds</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Quick disconnects (QDCs) and loop components</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Pumps, valves, sensors and leak detection</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Facility-to-IT cooling loop integration</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sols-panel" id="sol-power" role="tabpanel" aria-labelledby="power" hidden>
+        <div class="sols-panel-card">
+          <div class="sols-panel-inner">
+            <div class="sols-panel-left">
+              <h2>Power Infrastructure</h2>
+              <p class="sols-panel-intro">AI racks are pushing power density beyond traditional data center designs. Kainocore represents specialist power infrastructure technologies for increasingly dense compute environments, spanning rack- and row-level distribution, high-efficiency conversion, 48V and 800VDC architectures and dynamic power management.</p>
+              <div class="sols-for">
+                <span class="sols-for-label">Relevant for</span>
+                <div class="sols-tags">
+                  <span>AI clusters</span>
+                  <span>GPU deployments</span>
+                  <span>HPC</span>
+                  <span>Neocloud &amp; GPU compute operators</span>
+                  <span>High-density colocation</span>
+                </div>
+              </div>
+            </div>
+            <div class="sols-panel-right">
+              <span class="sols-right-label">Key technologies</span>
+              <ul class="sols-techs">
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Rack- and row-level power distribution</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Intelligent PDU and busway</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>High-efficiency AC/DC and DC/DC conversion</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>48V and 800VDC power architectures</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Dynamic power management and monitoring</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Selected energy-storage interfaces</li>
               </ul>
             </div>
           </div>
@@ -135,8 +149,8 @@
         <div class="sols-panel-card">
           <div class="sols-panel-inner">
             <div class="sols-panel-left">
-              <h2>AI Optical Interconnect</h2>
-              <p class="sols-panel-intro">Large AI clusters require enormous bandwidth between compute nodes. Kainocore focuses on high-speed interconnect technologies built for scale-up and scale-out AI fabrics.</p>
+              <h2>Optical Interconnect</h2>
+              <p class="sols-panel-intro">Large AI clusters require enormous bandwidth between GPUs, accelerators, servers, racks and clusters. Kainocore focuses on high-speed optical interconnect technologies that solve the bandwidth and latency bottleneck in scale-up and scale-out AI fabrics.</p>
               <div class="sols-for">
                 <span class="sols-for-label">Relevant for</span>
                 <div class="sols-tags">
@@ -151,11 +165,44 @@
             <div class="sols-panel-right">
               <span class="sols-right-label">Key technologies</span>
               <ul class="sols-techs">
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>400G / 800G / 1.6T optics</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>AOC / DAC / AEC</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Silicon photonics</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>Emerging CPO / NPO architectures</li>
-                <li><span class="sols-tech-dot" aria-hidden="true"></span>High-density optical connectivity</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>400G / 800G / 1.6T and emerging 3.2T</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>AEC, AOC and DAC</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>OSFP / QSFP-DD transceiver ecosystems</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Silicon photonics and optical engines</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Linear Pluggable Optics (LPO)</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>NPO / CPO architectures</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sols-panel" id="sol-memory" role="tabpanel" aria-labelledby="memory" hidden>
+        <div class="sols-panel-card">
+          <div class="sols-panel-inner">
+            <div class="sols-panel-left">
+              <h2>Memory &amp; Data Access</h2>
+              <p class="sols-panel-intro">Accelerators increasingly operate below their theoretical peak because data cannot be delivered fast enough from memory. Kainocore represents specialist memory and data-access technologies — from CXL expansion and fabric-attached memory to persistent memory and high-speed caching — that reduce the gap between compute and data in accelerated computing environments.</p>
+              <div class="sols-for">
+                <span class="sols-for-label">Relevant for</span>
+                <div class="sols-tags">
+                  <span>AI inference clusters</span>
+                  <span>Large-model deployments</span>
+                  <span>GPU compute operators</span>
+                  <span>HPC systems</span>
+                  <span>Memory-intensive AI workloads</span>
+                </div>
+              </div>
+            </div>
+            <div class="sols-panel-right">
+              <span class="sols-right-label">Key technologies</span>
+              <ul class="sols-techs">
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>CXL</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Memory expansion and pooling</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Fabric-attached memory</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>Persistent memory</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>MRAM</li>
+                <li><span class="sols-tech-dot" aria-hidden="true"></span>High-speed caching</li>
               </ul>
             </div>
           </div>
@@ -172,7 +219,7 @@
     <div class="sols-cta-inner">
       <div class="sols-cta-text">
         <h3>Working on a high-density AI infrastructure project?</h3>
-        <p>Talk to Kainocore about power, cooling or interconnect technologies for your deployment.</p>
+        <p>Talk to Kainocore about thermal, power, interconnect or memory technologies for your deployment.</p>
       </div>
       <a class="sols-cta-link" href="contact.html">Discuss a project →</a>
     </div>
@@ -222,8 +269,10 @@
     });
   });
 
-  /* Honour URL hash — homepage strip links: #power, #cooling, #interconnect */
+  /* Honour URL hash — strip links: #thermal, #power, #interconnect, #memory */
   var hash = (window.location.hash || '').replace('#', '');
+  /* Legacy alias: #cooling → #thermal */
+  if (hash === 'cooling') hash = 'thermal';
   if (hash && document.getElementById(hash)) {
     activate('sol-' + hash);
   }

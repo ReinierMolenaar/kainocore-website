@@ -251,7 +251,7 @@
 /* Three stat boxes */
 .ab-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -461,7 +461,7 @@
   }
 
   .ab-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .ab-principles {
@@ -479,6 +479,7 @@
   .ab-close       { padding: 60px 0 72px; }
   .ab-wordmark    { letter-spacing: -0.03em; }
   .ab-stat        { padding: 20px 20px 18px; }
+  .ab-stats       { grid-template-columns: 1fr; }
   .ab-principle   { padding: 18px 18px 16px; }
   .ab-belief-sub  { padding-left: 0; }
 }
@@ -538,7 +539,7 @@
         AI growth is increasingly constrained by the infrastructure around compute.
       </h2>
       <p class="ab-belief-sub">
-        Power availability, thermal management and bandwidth increasingly determine
+        Heat, available power, network bandwidth and memory architecture increasingly determine
         how quickly new AI capacity can actually be deployed. The bottleneck has
         moved from the chip to the physical layer around it.
       </p>
@@ -563,9 +564,9 @@
         </h3>
         <p class="ab-mv-text">
           We connect specialist technology manufacturers with the organizations
-          deploying AI capacity in Benelux, providing access to advanced power,
-          cooling and interconnect solutions that are not widely available through
-          general distribution.
+          deploying AI capacity in Benelux, providing access to advanced thermal,
+          power, interconnect and memory infrastructure technologies that are not
+          widely available through general distribution.
         </p>
       </div>
 
@@ -575,9 +576,9 @@
           Become the specialist infrastructure partner for the physical layer behind the AI era.
         </h3>
         <p class="ab-mv-text">
-          Power, cooling and interconnect for high-density AI. A focused platform
-          built around a small number of high-value technology categories and the
-          local market relationships that bring them to deployment.
+          Thermal infrastructure, power, interconnect and memory for accelerated computing.
+          A focused platform built around a small number of high-value technology categories
+          and the local market relationships that bring them to deployment.
         </p>
       </div>
 
@@ -599,10 +600,10 @@
         A fast-growing market with a fragmented specialist supply chain.
       </h2>
       <p class="ab-market-sub">
-        AI infrastructure is becoming denser, more power-intensive and harder to cool
-        and connect. At the same time, many advanced infrastructure manufacturers still
-        lack strong local routes to market in Benelux. Kainocore sits between those
-        two needs.
+        AI infrastructure is becoming denser, more power-intensive, harder to cool, connect
+        and increasingly memory-constrained. At the same time, many advanced infrastructure
+        manufacturers still lack strong local routes to market in Benelux. Kainocore sits
+        between those two needs.
       </p>
     </div>
 
@@ -619,7 +620,7 @@
 
       <div class="ab-stat">
         <div class="ab-stat-num">~<em>29</em>%</div>
-        <div class="ab-stat-label">CAGR forecast</div>
+        <div class="ab-stat-label">Thermal CAGR</div>
         <p class="ab-stat-desc">
           Forecast compound annual growth rate for European liquid cooling over the
           relevant period, as high-density deployments replace air cooling.
@@ -627,11 +628,20 @@
       </div>
 
       <div class="ab-stat">
-        <div class="ab-stat-num" style="font-size:clamp(26px,3vw,40px);letter-spacing:-.03em">800G<em style="font-size:.62em;vertical-align:baseline">&rarr;</em>1.6T</div>
+        <div class="ab-stat-num" style="font-size:clamp(22px,2.6vw,36px);letter-spacing:-.03em">800G<em style="font-size:.62em;vertical-align:baseline">&rarr;</em>1.6T</div>
         <div class="ab-stat-label">Interconnect transition</div>
         <p class="ab-stat-desc">
-          The shift from 800G to 1.6T network speeds is driving next-generation
+          The shift from 800G to 1.6T and beyond is driving next-generation optical
           interconnect demand across AI data-centre build-outs.
+        </p>
+      </div>
+
+      <div class="ab-stat">
+        <div class="ab-stat-num">&gt;<em>40</em>%</div>
+        <div class="ab-stat-label">Inference bottleneck</div>
+        <p class="ab-stat-desc">
+          Large-model inference is predominantly memory-bandwidth bound, not compute-bound,
+          as model weights must be loaded from memory on every generation step.
         </p>
       </div>
 
