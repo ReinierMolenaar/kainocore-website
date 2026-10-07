@@ -1011,7 +1011,7 @@
   <div class="container cfg-hero-inner">
     <div class="cfg-eyebrow">AI Infrastructure Configurator</div>
     <h1>Design AI infrastructure<br>around real constraints.</h1>
-    <p>Configure thermal, power and interconnect requirements for high-density AI deployments and explore a recommended infrastructure architecture in real time.</p>
+    <p>Configure thermal, power, interconnect and memory requirements for high-density AI deployments and explore a recommended infrastructure architecture in real time.</p>
     <div><span class="cfg-hero-note">Interactive concept tool. Final designs require technical validation.</span></div>
   </div>
 </section>
@@ -1045,8 +1045,12 @@
               <div class="cfg-step-circle" aria-hidden="true"><span>4</span></div>
               <span class="cfg-step-label">Interconnect</span>
             </button>
-            <button class="cfg-step-btn" data-step="5" aria-label="Step 5: Facility">
+            <button class="cfg-step-btn" data-step="5" aria-label="Step 5: Memory">
               <div class="cfg-step-circle" aria-hidden="true"><span>5</span></div>
+              <span class="cfg-step-label">Memory</span>
+            </button>
+            <button class="cfg-step-btn" data-step="6" aria-label="Step 6: Facility">
+              <div class="cfg-step-circle" aria-hidden="true"><span>6</span></div>
               <span class="cfg-step-label">Facility</span>
             </button>
           </div>
@@ -1284,18 +1288,19 @@
                 <div class="cfg-seg" id="seg-net-speed">
                   <button class="cfg-seg-opt" data-val="400G">400G</button>
                   <button class="cfg-seg-opt is-active" data-val="800G">800G</button>
-                  <button class="cfg-seg-opt" data-val="1.6T">1.6T-ready</button>
+                  <button class="cfg-seg-opt" data-val="1.6T">1.6T</button>
+                  <button class="cfg-seg-opt" data-val="3.2T">3.2T</button>
                 </div>
               </div>
 
               <div class="cfg-field">
                 <span class="cfg-field-label">Interconnect Type</span>
                 <div class="cfg-radio-group" id="rg-ic-type">
-                  <button class="cfg-radio-opt" data-val="dac">
-                    <span class="cfg-radio-dot"></span>DAC
+                  <button class="cfg-radio-opt" data-val="aec">
+                    <span class="cfg-radio-dot"></span>AEC
                   </button>
-                  <button class="cfg-radio-opt" data-val="aoc">
-                    <span class="cfg-radio-dot"></span>AOC
+                  <button class="cfg-radio-opt" data-val="dac-aoc">
+                    <span class="cfg-radio-dot"></span>DAC / AOC
                   </button>
                   <button class="cfg-radio-opt" data-val="optical">
                     <span class="cfg-radio-dot"></span>Optical transceivers
@@ -1340,8 +1345,64 @@
             </div>
           </div><!-- /pane-4 -->
 
-          <!-- ── STEP 5: Facility ───────────────────────────────────────────── -->
+          <!-- ── STEP 5: Memory & Data Access ──────────────────────────────── -->
           <div class="cfg-pane" id="cfg-pane-5">
+            <div class="cfg-fields">
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Model / Dataset Memory Scale</span>
+                <div class="cfg-radio-group" id="rg-mem-scale">
+                  <button class="cfg-radio-opt is-active" data-val="fits">
+                    <span class="cfg-radio-dot"></span>Fits within GPU on-board memory
+                  </button>
+                  <button class="cfg-radio-opt" data-val="pooling">
+                    <span class="cfg-radio-dot"></span>Requires memory pooling across nodes
+                  </button>
+                  <button class="cfg-radio-opt" data-val="extended">
+                    <span class="cfg-radio-dot"></span>Requires memory capacity beyond GPU limit
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <span class="cfg-field-label">Memory Architecture Preference</span>
+                <div class="cfg-radio-group" id="rg-mem-arch">
+                  <button class="cfg-radio-opt is-active" data-val="none">
+                    <span class="cfg-radio-dot"></span>No preference — use recommendation
+                  </button>
+                  <button class="cfg-radio-opt" data-val="cxl">
+                    <span class="cfg-radio-dot"></span>CXL memory expansion / pooling
+                  </button>
+                  <button class="cfg-radio-opt" data-val="persistent">
+                    <span class="cfg-radio-dot"></span>Persistent memory / MRAM
+                  </button>
+                  <button class="cfg-radio-opt" data-val="fabric">
+                    <span class="cfg-radio-dot"></span>Fabric-attached memory
+                  </button>
+                </div>
+              </div>
+
+              <div class="cfg-field">
+                <div class="cfg-toggle-row" id="tog-data-access">
+                  <div class="cfg-toggle-info">
+                    <span class="cfg-toggle-title">Low-latency data access required</span>
+                    <span class="cfg-toggle-sub">Prioritise memory technologies that reduce data-access latency for inference or real-time workloads</span>
+                  </div>
+                  <div class="cfg-toggle-track" aria-hidden="true">
+                    <div class="cfg-toggle-thumb"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="cfg-step-nav">
+              <button class="cfg-btn-back" data-back="4">← Back</button>
+              <button class="cfg-btn-next" data-next="6">Continue <span aria-hidden="true">→</span></button>
+            </div>
+          </div><!-- /pane-5 -->
+
+          <!-- ── STEP 6: Facility ───────────────────────────────────────────── -->
+          <div class="cfg-pane" id="cfg-pane-6">
             <div class="cfg-fields">
 
               <div class="cfg-field">
@@ -1403,12 +1464,12 @@
 
             </div>
             <div class="cfg-step-nav">
-              <button class="cfg-btn-back" data-back="4">← Back</button>
+              <button class="cfg-btn-back" data-back="5">← Back</button>
               <button class="cfg-btn-next" id="btn-generate" data-next="done">
                 Generate architecture <span aria-hidden="true">→</span>
               </button>
             </div>
-          </div><!-- /pane-5 -->
+          </div><!-- /pane-6 -->
 
         </div><!-- /.cfg-card (left) -->
       </div><!-- /.cfg-left -->
@@ -1468,6 +1529,11 @@
               <span class="cfg-rec-card-sub" id="rec-ic-sub">—</span>
             </div>
             <div class="cfg-rec-card">
+              <span class="cfg-rec-card-eye">Memory &amp; Data Access</span>
+              <span class="cfg-rec-card-val" id="rec-memory-val">—</span>
+              <span class="cfg-rec-card-sub" id="rec-memory-sub">—</span>
+            </div>
+            <div class="cfg-rec-card">
               <span class="cfg-rec-card-eye">Deployment Notes</span>
               <span class="cfg-rec-card-val" id="rec-deploy-val">—</span>
               <span class="cfg-rec-card-sub" id="rec-deploy-sub">—</span>
@@ -1519,7 +1585,7 @@
       <div class="cfg-support-card">
         <span class="cfg-support-eye">Compatibility logic</span>
         <h3 class="cfg-support-title">Match constraints before you commit.</h3>
-        <p class="cfg-support-desc">Check thermal, power and interconnect choices against basic deployment constraints before they become expensive design changes.</p>
+        <p class="cfg-support-desc">Check thermal, power, interconnect and memory choices against basic deployment constraints before they become expensive design changes.</p>
       </div>
       <div class="cfg-support-card">
         <span class="cfg-support-eye">Faster qualification</span>
@@ -1588,6 +1654,10 @@
     clusterScale:      'multi',
     latencySensitive:  false,
 
+    memoryScale:       'fits',
+    memoryArch:        'none',
+    dataAccessPriority: false,
+
     deployType:        'existing',
     spaceConstraint:   'medium',
     existCooling:      'air',
@@ -1596,7 +1666,7 @@
   };
 
   var currentStep = 1;
-  var TOTAL_STEPS = 5;
+  var TOTAL_STEPS = 6;
 
   /* ── DOM helpers ───────────────────────────────────────────────────────── */
   function $id(id) { return document.getElementById(id); }
@@ -1741,6 +1811,8 @@
   bindRadio('rg-cooling',       'coolingPref');
   bindRadio('rg-ic-type',       'icType');
   bindRadio('rg-cluster-scale', 'clusterScale');
+  bindRadio('rg-mem-scale',     'memoryScale');
+  bindRadio('rg-mem-arch',      'memoryArch');
   bindRadio('rg-deploy-type',   'deployType');
 
   /* ── Select dropdowns ───────────────────────────────────────────────────── */
@@ -1811,6 +1883,7 @@
   bindToggle('tog-power-constrained', 'powerConstrained');
   bindToggle('tog-heat-reuse',        'heatReuse');
   bindToggle('tog-latency',           'latencySensitive');
+  bindToggle('tog-data-access',       'dataAccessPriority');
 
   /* ── Notes ──────────────────────────────────────────────────────────────── */
   var inpNotes = $id('inp-notes');
@@ -1900,17 +1973,57 @@
 
     /* ── Interconnect recommendation ────────────────────────────────────── */
     var icVal, icSub;
-    if (gpuCount <= 64) {
-      icVal = '400G fabric';
-      icSub = 'Compatible with this cluster scale';
-    } else if (gpuCount <= 512) {
-      icVal = '800G optical fabric';
-      icSub = 'Scale-out ready · recommended';
+    var speedNames = {
+      '400G': '400G optical fabric',
+      '800G': '800G optical fabric',
+      '1.6T': '1.6T optical fabric',
+      '3.2T': 'Emerging 3.2T optical fabric'
+    };
+    /* Auto-recommend based on cluster scale, override if user specified */
+    if (S.clusterScale === 'single' || gpuCount <= 64) {
+      icVal = speedNames[S.networkSpeed] || '400G optical fabric';
+      icSub = 'Compatible with single-rack or small-cluster scale';
+    } else if (S.clusterScale === 'multi' || gpuCount <= 512) {
+      icVal = speedNames[S.networkSpeed] || '800G optical fabric';
+      icSub = 'Scale-out ready · recommended for multi-rack deployments';
     } else {
-      icVal = '1.6T-ready fabric';
-      icSub = 'Future-facing large-scale design';
+      icVal = speedNames[S.networkSpeed] || '1.6T optical fabric';
+      icSub = 'High-bandwidth architecture for large-scale AI fabrics';
     }
+    var icTypeDetail = {
+      'aec':     'AEC · active electrical',
+      'dac-aoc': 'DAC / AOC cabling',
+      'optical': 'Optical transceivers',
+      'mixed':   'Mixed cabling architecture'
+    };
+    if (S.icType && S.icType !== 'mixed') icSub += ' · ' + (icTypeDetail[S.icType] || '');
     if (S.latencySensitive) icSub += ' · low-latency priority';
+
+    /* ── Memory & Data Access recommendation ─────────────────────────────── */
+    var memVal, memSub;
+    var mScale = S.memoryScale; /* 'fits' / 'pooling' / 'extended' */
+    var mArch  = S.memoryArch;  /* 'none' / 'cxl' / 'persistent' / 'fabric' */
+
+    if (mArch === 'fabric' || (mScale === 'extended' && mArch !== 'persistent')) {
+      memVal = 'CXL pooling and fabric-attached memory';
+      memSub = 'Extended memory architecture · disaggregated access';
+    } else if (mScale === 'extended' && mArch === 'persistent') {
+      memVal = 'Persistent memory with CXL expansion';
+      memSub = 'High-capacity persistent tier · extended memory access';
+    } else if (mArch === 'cxl' || mScale === 'pooling') {
+      memVal = 'CXL memory expansion';
+      memSub = 'Memory pooling for workload scale';
+    } else if (mArch === 'persistent') {
+      memVal = 'Persistent memory / MRAM';
+      memSub = 'Low-latency persistent storage tier';
+    } else if (S.workloadType === 'training') {
+      memVal = 'High-speed caching layer';
+      memSub = 'Persistent memory for checkpoints and dataset access';
+    } else {
+      memVal = 'HBM with caching layer';
+      memSub = 'On-board memory sufficient for this model scale';
+    }
+    if (S.dataAccessPriority) memSub += ' · low-latency access priority';
 
     /* ── Deployment notes ────────────────────────────────────────────────── */
     var gpuLabels = {
@@ -1996,6 +2109,7 @@
       powerVal, powerSub,
       coolingVal, coolingSub,
       icVal, icSub,
+      memVal, memSub,
       deployVal, deploySub,
       warnings
     };
@@ -2018,6 +2132,8 @@
     setText('rec-cooling-sub', r.coolingSub);
     setText('rec-ic-val',      r.icVal);
     setText('rec-ic-sub',      r.icSub);
+    setText('rec-memory-val',  r.memVal);
+    setText('rec-memory-sub',  r.memSub);
     setText('rec-deploy-val',  r.deployVal);
     setText('rec-deploy-sub',  r.deploySub);
 
